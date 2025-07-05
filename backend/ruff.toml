@@ -3,3 +3,5 @@
 # All rules at: https://docs.astral.sh/ruff/rules/
 
 select = ["ALL"]
+
+ignore = ["D100", "D104"]

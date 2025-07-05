@@ -1,6 +1,0 @@
-pyproject.toml
-app/__init__.py
-nomadloops.egg-info/PKG-INFO
-nomadloops.egg-info/SOURCES.txt
-nomadloops.egg-info/dependency_links.txt
-nomadloops.egg-info/top_level.txt
