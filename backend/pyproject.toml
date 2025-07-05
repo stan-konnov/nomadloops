@@ -1,0 +1,5 @@
+[project]
+name = "nomadloops"
+version = "0.1.0"
+description = "Nomad Loops Backend"
+authors = [{ name="Stan", email="stanis.konnov@gmail.com" }]

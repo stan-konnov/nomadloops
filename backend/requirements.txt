@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+pydantic
+httpx
+python-dotenv
+openai
+ruff
+pre-commit
+pytest
+pytest-cov
+pytest-dotenv
