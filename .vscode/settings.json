@@ -7,6 +7,7 @@
         "**/.ruff_cache": true,
         "**/.coverage.**": true,
         "**/.pytest_cache": true,
+        "**/nomadloops.egg-info": true
     },
 
     "python.analysis.autoImportCompletions": true,
