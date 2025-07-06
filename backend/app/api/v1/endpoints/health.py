@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.api.dtos.base_api_response import BaseApiResponseDto
 
-router = APIRouter(prefix="/health", tags=["Health"])
+router = APIRouter(prefix="/health")
 
 
 @router.get(
