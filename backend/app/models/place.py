@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from pydantic import BaseModel
+
+if TYPE_CHECKING:
+    from app.utils.enums import PlaceCategory
 
 
 class Coordinates(BaseModel):
@@ -15,7 +20,7 @@ class Place(BaseModel):
 
     name: str
     address: str
-    category: str
+    category: PlaceCategory
 
     url: str | None
     price: str | None
