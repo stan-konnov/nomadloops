@@ -4,4 +4,4 @@
 
 select = ["ALL"]
 
-ignore = ["D100", "D104"]
+ignore = ["D100", "D104", "D212", "D202"]
