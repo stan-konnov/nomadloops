@@ -1,28 +1,40 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from pydantic import BaseModel, Field
 
-from pydantic import BaseModel
-
-if TYPE_CHECKING:
-    from app.utils.enums import PlaceCategory
+from app.utils.enums import PlaceCategory  # noqa: TC001
 
 
 class Coordinates(BaseModel):
     """A data model to represent a geographic coordinates."""
 
-    lat: float
-    lng: float
+    lat: float = Field(..., description="Latitude of the coordinates.")
+
+    lng: float = Field(..., description="Longitude of the coordinates.")
 
 
 class Place(BaseModel):
     """A data model to represent a single point of interest in the nomad loop."""
 
-    name: str
-    address: str
-    category: PlaceCategory
+    name: str = Field(..., description="Name of the place.")
 
-    url: str | None
-    price: str | None
+    address: str = Field(..., description="Address of the place.")
 
-    coordinates: Coordinates
+    category: PlaceCategory = Field(
+        ...,
+        description="Category of the place, e.g., living, working, etc.",
+    )
+
+    url: str | None = Field(
+        None,
+        description="URL of the place, e.g., website or social media link.",
+    )
+    price: float | None = Field(
+        None,
+        description="Price of the place, e.g., cost of living or provided service.",
+    )
+
+    coordinates: Coordinates = Field(
+        ...,
+        description="Geographic coordinates of the place.",
+    )
