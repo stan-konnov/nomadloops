@@ -1,0 +1,7 @@
+[lint]
+
+# All rules at: https://docs.astral.sh/ruff/rules/
+
+select = ["ALL"]
+
+ignore = ["D100", "D104", "D212", "D202"]

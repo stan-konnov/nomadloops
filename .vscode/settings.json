@@ -1,0 +1,25 @@
+{
+    "files.exclude": {
+        "**/venv": true,
+        "**/.coverage": true,
+        "**/__pycache__": true,
+        "**/__init__.py": true,
+        "**/.ruff_cache": true,
+        "**/.coverage.**": true,
+        "**/.pytest_cache": true,
+        "**/nomadloops.egg-info": true
+    },
+
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "standard",
+
+    "[python]": {
+        "editor.tabSize": 4,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit",
+            "source.fixAll": "always"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff",
+    },
+}
