@@ -31,8 +31,8 @@ class RedisClient:
     def connect(cls) -> None:
         """Initialize Redis client instance, creating it if it doesn't exist."""
 
-        # We use class variable
-        # to guarantee a singleton instance (of connection!)
+        # We use class variable to guarantee
+        # a singleton instance (of connection!)
         if cls._instance is None:
             cls._instance = Redis.from_url(
                 REDIS_URL,
