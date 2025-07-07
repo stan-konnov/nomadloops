@@ -25,7 +25,7 @@ router = APIRouter(prefix="/health")
         },
     },
 )
-async def health() -> BaseApiResponseDto:
-    """Health check endpoint to verify that the API is running."""
+async def check_health() -> BaseApiResponseDto:
+    """Check system health to verify that the API is running."""
 
     return BaseApiResponseDto(success=True, message="API is running.")

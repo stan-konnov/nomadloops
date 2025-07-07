@@ -44,7 +44,7 @@ router = APIRouter(prefix="/loops")
         },
     },
 )
-async def start_building_loop(
+async def start_building_loops(
     request: CreateLoopsRequestDto,
     loops_management_service: Annotated[
         LoopsManagementService,
