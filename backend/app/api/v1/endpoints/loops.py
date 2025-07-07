@@ -35,5 +35,5 @@ async def start_building_loop(
     return DataApiResponseDto[LoopCreationStartedResponseDto](
         success=True,
         message="Loop generation started.",
-        data=LoopCreationStartedResponseDto(loop_id=str(loop_id)),
+        data=LoopCreationStartedResponseDto(loop_id=loop_id),
     )
