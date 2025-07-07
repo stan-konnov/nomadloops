@@ -5,7 +5,7 @@ from functools import lru_cache
 from json import dumps, loads
 from typing import Union
 
-from aioredis import Redis
+from redis.asyncio import Redis
 
 from app.settings import REDIS_URL
 
@@ -25,7 +25,7 @@ JSONType = Union[
 class RedisClient:
     """Redis client for managing connections and operations."""
 
-    _instance: Redis
+    _instance: Redis | None = None
 
     @classmethod
     def connect(cls) -> None:
@@ -33,7 +33,7 @@ class RedisClient:
 
         # We use class variable to guarantee
         # a singleton instance (of connection!)
-        if cls._instance is None:
+        if not cls._instance:
             cls._instance = Redis.from_url(
                 REDIS_URL,
                 encoding="utf-8",
@@ -50,12 +50,22 @@ class RedisClient:
     async def set(self, key: str, value: JSONType) -> None:
         """Set a key-value pair in Redis with JSON serialization."""
 
+        if not self._instance:
+            raise RuntimeError(
+                "Redis client is not connected, please use factory method.",
+            )
+
         raw_value = dumps(value) if not isinstance(value, str) else value
 
         await self._instance.set(key, raw_value)
 
     async def get(self, key: str) -> JSONType | None:
         """Get a value by key from Redis with JSON deserialization."""
+
+        if not self._instance:
+            raise RuntimeError(
+                "Redis client is not connected please use factory method.",
+            )
 
         raw_value = await self._instance.get(key)
 
@@ -66,4 +76,7 @@ class RedisClient:
 def get_redis_client() -> RedisClient:
     """Return a singleton instance of Redis Client."""
 
-    return RedisClient()
+    redis_client = RedisClient()
+    redis_client.connect()
+
+    return redis_client

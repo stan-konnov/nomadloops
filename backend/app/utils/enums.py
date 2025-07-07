@@ -30,3 +30,13 @@ class PlaceCategory(str, Enum):
 
     # Police, fire stations, consulates
     EMERGENCY_ESSENTIALS = "emergency_essentials"
+
+
+class LoopStatus(str, Enum):
+    """Enum of possible loop statuses."""
+
+    # Loop is created
+    READY = "ready"
+
+    # Loop is being created
+    CREATING = "creating"
