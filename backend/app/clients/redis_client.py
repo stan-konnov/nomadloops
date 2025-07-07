@@ -69,7 +69,12 @@ class RedisClient:
 
         raw_value = await self._instance.get(key)
 
-        return loads(raw_value) if raw_value is not None else None
+        try:
+            return loads(raw_value)
+
+        # It's a string or None, return it as is
+        except (ValueError, TypeError):
+            return raw_value
 
 
 @lru_cache(maxsize=1)

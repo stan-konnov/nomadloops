@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from fastapi import BackgroundTasks
 
 from app.clients.redis_client import get_redis_client
+from app.errors.invariants import LoopGenerationProcessAlreadyRunningError
 from app.jobs.generate_loops import generate_loops
 from app.utils.enums import LoopsGenerationStatus
 
@@ -27,6 +28,14 @@ class LoopsManagementService:
         selected_categories: list[PlaceCategory] | None,
     ) -> None:
         """Start the loop creation process and return a unique loop ID."""
+
+        currently_running_job = await self.redis_client.get("status")
+
+        if currently_running_job == LoopsGenerationStatus.GENERATING.value:
+            raise LoopGenerationProcessAlreadyRunningError(
+                "A loop generation is already in progress. "
+                "Please wait until it completes.",
+            )
 
         background_tasks = BackgroundTasks()
         background_tasks.add_task(

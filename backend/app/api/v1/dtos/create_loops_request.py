@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from app.utils.enums import PlaceCategory  # noqa: TC001
 
 
-class CreateLoopRequestDto(BaseModel):
+class CreateLoopsRequestDto(BaseModel):
     """DTO for creating a new loop request."""
 
     city: str = Field(..., description="City for which to generate the loop.")
