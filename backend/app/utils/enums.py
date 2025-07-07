@@ -32,14 +32,14 @@ class PlaceCategory(str, Enum):
     EMERGENCY_ESSENTIALS = "emergency_essentials"
 
 
-class LoopStatus(str, Enum):
-    """Enum of possible loop statuses."""
+class LoopsGenerationStatus(str, Enum):
+    """Enum of possible statuses of a loop generation process."""
 
-    # Loop is created
+    # Loops are ready
     READY = "ready"
 
-    # Loop creation failed
+    # Loop generation failed
     ERROR = "error"
 
-    # Loop is being created
-    CREATING = "creating"
+    # Loop generation is in progress
+    GENERATING = "generating"

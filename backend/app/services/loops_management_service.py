@@ -1,19 +1,18 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from uuid import uuid4
 
 from fastapi import BackgroundTasks
 
 from app.clients.redis_client import get_redis_client
-from app.jobs.create_loop import create_loop
-from app.utils.enums import LoopStatus
+from app.jobs.generate_loops import generate_loops
+from app.utils.enums import LoopsGenerationStatus
 
 if TYPE_CHECKING:
     from app.utils.enums import PlaceCategory
 
 
-class LoopManagementService:
+class LoopsManagementService:
     """Service for managing loops."""
 
     def __init__(self) -> None:
@@ -26,20 +25,15 @@ class LoopManagementService:
         city: str,
         monthly_budget: float | None,
         selected_categories: list[PlaceCategory] | None,
-    ) -> str:
+    ) -> None:
         """Start the loop creation process and return a unique loop ID."""
-
-        loop_id = str(uuid4())
 
         background_tasks = BackgroundTasks()
         background_tasks.add_task(
-            create_loop,
-            loop_id,
+            generate_loops,
             city,
             monthly_budget,
             selected_categories,
         )
 
-        await self.redis_client.set(f"{loop_id}:status", LoopStatus.CREATING.value)
-
-        return loop_id
+        await self.redis_client.set("status", LoopsGenerationStatus.GENERATING.value)
