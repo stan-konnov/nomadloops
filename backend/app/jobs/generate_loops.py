@@ -42,23 +42,23 @@ async def generate_loops(
 
                 LOOP OBJECT STRUCTURE:
                 Each loop object in the array must have the following keys:
-                {
-                "city": "<exact name of the city as provided>",
-                "items": [
                     {
-                    "name": "<realistic name of the place>",
-                    "category": "<one of the requested categories>",
-                    "address": "<specific street address, area, or district — realistic for the city>",
-                    "url": "<direct website URL or Google Maps link, or leave empty if none is known>",
-                    "coordinates": {
-                        "lat": <float>,  // approximate decimal latitude, always include
-                        "lng": <float>   // approximate decimal longitude, always include
-                    },
-                    "price": "<single number with currency, e.g., '450 USD'>"
-                    },
-                    … (exactly one item per category) …
-                ]
-                }
+                        "city": "<exact name of the city as provided>",
+                        "items": [
+                            {
+                                "name": "<realistic name of the place>",
+                                "category": "<one of the requested categories>",
+                                "address": "<specific street address, area, or district — realistic for the city>",
+                                "url": "<direct website URL or Google Maps link, or leave empty if none is known>",
+                                "coordinates": {
+                                    "lat": <float>,  // approximate decimal latitude, always include
+                                    "lng": <float>   // approximate decimal longitude, always include
+                                },
+                                "price": "<single number with currency, e.g., '450 USD'>"
+                            },
+                            … (exactly one item per category) …
+                        ]
+                    }
 
                 GUIDELINES:
                 - Always include one (and only one) item per requested category in each loop.
@@ -79,21 +79,21 @@ async def generate_loops(
 
                 Example of the final output format:
                 [
-                {
-                    "city": "Bangkok",
-                    "items": [
                     {
-                        "name": "Nomad Nest Hostel",
-                        "category": "living",
-                        "address": "123 Sukhumvit Soi 11, Bangkok",
-                        "url": "https://maps.google.com/…",
-                        "coordinates": { "lat": 13.743, "lng": 100.535 },
-                        "price": "350 USD"
+                        "city": "Bangkok",
+                        "items": [
+                            {
+                                "name": "Nomad Nest Hostel",
+                                "category": "living",
+                                "address": "123 Sukhumvit Soi 11, Bangkok",
+                                "url": "https://maps.google.com/…",
+                                "coordinates": { "lat": 13.743, "lng": 100.535 },
+                                "price": "350 USD"
+                            },
+                            …
+                        ]
                     },
                     …
-                    ]
-                },
-                …
                 ]
 
                 When ready, return **only the JSON array of loop objects**, nothing else.
