@@ -21,3 +21,12 @@ class CreateLoopRequestDto(BaseModel):
             "If provided, the loop will be optimized to include only these categories."
         ),
     )
+
+    number_of_loops_to_generate: int = Field(
+        1,
+        ge=1,
+        le=10,
+        description=(
+            "Number of loops to generate. Must be at least 1. Must be at most 10."
+        ),
+    )
