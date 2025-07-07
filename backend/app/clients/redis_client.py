@@ -9,7 +9,8 @@ from aioredis import Redis
 
 from app.settings import REDIS_URL
 
-# Type for JSON-compatible values
+# Type for serializable and
+# deserializable JSON values
 JSONType = Union[
     str,
     int,
@@ -27,9 +28,11 @@ class RedisClient:
     _instance: Redis
 
     @classmethod
-    async def get_client(cls) -> Redis:
-        """Get the Redis client instance, creating it if it doesn't exist."""
+    def connect(cls) -> None:
+        """Initialize Redis client instance, creating it if it doesn't exist."""
 
+        # We use class variable
+        # to guarantee a singleton instance (of connection!)
         if cls._instance is None:
             cls._instance = Redis.from_url(
                 REDIS_URL,
@@ -37,10 +40,8 @@ class RedisClient:
                 decode_responses=True,
             )
 
-        return cls._instance
-
     @classmethod
-    async def close(cls) -> None:
+    async def close_connection(cls) -> None:
         """Close the Redis client connection if it exists."""
 
         if cls._instance:
@@ -63,6 +64,6 @@ class RedisClient:
 
 @lru_cache(maxsize=1)
 def get_redis_client() -> RedisClient:
-    """Return a singleton instance of RedisClient."""
+    """Return a singleton instance of Redis Client."""
 
     return RedisClient()

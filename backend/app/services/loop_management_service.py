@@ -8,3 +8,4 @@ class LoopManagementService:
         """Construct Loop Management Service."""
 
         self.redis_client = get_redis_client()
+        self.redis_client.connect()

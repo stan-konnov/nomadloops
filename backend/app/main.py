@@ -1,13 +1,25 @@
+from collections.abc import AsyncGenerator
 from typing import Any
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.concurrency import asynccontextmanager
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.responses import HTMLResponse
 
 from app.api.router import router
+from app.clients.redis_client import RedisClient
 from app.settings import ENVIRONMENT, HOST, PORT, VERSION
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator:  # noqa: ARG001
+    """Close resource (Redis client) on application shutdown."""
+
+    yield
+    await RedisClient.close_connection()
+
 
 app = FastAPI(
     docs_url=None,
