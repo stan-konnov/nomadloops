@@ -29,9 +29,9 @@ class LoopsManagementService:
     ) -> None:
         """Start the loop creation process and return a unique loop ID."""
 
-        currently_running_job = await self.redis_client.get("status")
+        currently_running_job_status = await self.redis_client.get("status")
 
-        if currently_running_job == LoopsGenerationStatus.GENERATING.value:
+        if currently_running_job_status == LoopsGenerationStatus.GENERATING.value:
             raise LoopGenerationProcessAlreadyRunningError(
                 "A loop generation is already in progress. "
                 "Please wait until it completes.",
