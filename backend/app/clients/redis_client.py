@@ -1,39 +1,68 @@
 from __future__ import annotations
 
-from typing import Any
+from collections.abc import MutableMapping, Sequence
+from functools import lru_cache
+from json import dumps, loads
+from typing import Union
 
 from aioredis import Redis
 
 from app.settings import REDIS_URL
 
+# Type for JSON-compatible values
+JSONType = Union[
+    str,
+    int,
+    float,
+    bool,
+    None,
+    Sequence["JSONType"],
+    MutableMapping[str, "JSONType"],
+]
+
 
 class RedisClient:
     """Redis client for managing connections and operations."""
 
-    client: Redis
+    _instance: Redis
 
-    def __init__(self) -> None:
-        """Construct Redis Client."""
+    @classmethod
+    async def get_client(cls) -> Redis:
+        """Get the Redis client instance, creating it if it doesn't exist."""
 
-        if not self.client:
-            self.client = Redis.from_url(
+        if cls._instance is None:
+            cls._instance = Redis.from_url(
                 REDIS_URL,
                 encoding="utf-8",
                 decode_responses=True,
             )
 
-    async def close(self) -> None:
-        """Close the Redis client connection."""
+        return cls._instance
 
-        if self.client:
-            await self.client.close()
+    @classmethod
+    async def close(cls) -> None:
+        """Close the Redis client connection if it exists."""
 
-    async def set(self, key: str, value: Any) -> None:  # noqa: ANN401
-        """Set a key-value pair in Redis."""
+        if cls._instance:
+            await cls._instance.close()
 
-        await self.client.set(key, value)
+    async def set(self, key: str, value: JSONType) -> None:
+        """Set a key-value pair in Redis with JSON serialization."""
 
-    async def get(self, key: str) -> Any:  # noqa: ANN401
-        """Get a value by key from Redis."""
+        raw_value = dumps(value) if not isinstance(value, str) else value
 
-        return await self.client.get(key)
+        await self._instance.set(key, raw_value)
+
+    async def get(self, key: str) -> JSONType | None:
+        """Get a value by key from Redis with JSON deserialization."""
+
+        raw_value = await self._instance.get(key)
+
+        return loads(raw_value) if raw_value is not None else None
+
+
+@lru_cache(maxsize=1)
+def get_redis_client() -> RedisClient:
+    """Return a singleton instance of RedisClient."""
+
+    return RedisClient()
