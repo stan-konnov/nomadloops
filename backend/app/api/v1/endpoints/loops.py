@@ -19,9 +19,28 @@ router = APIRouter(prefix="/loops")
     responses={
         HTTPStatus.CREATED: {
             "description": "Loop generation started successfully.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "success": True,
+                        "message": "Loop generation started successfully.",
+                    },
+                },
+            },
         },
         HTTPStatus.BAD_REQUEST: {
             "description": "Loop generation process is already running.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "success": False,
+                        "message": (
+                            "A loop generation is already in progress. "
+                            "Please wait until it completes."
+                        ),
+                    },
+                },
+            },
         },
     },
 )
