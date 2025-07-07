@@ -19,7 +19,7 @@ async def generate_loops(
     redis_client = get_redis_client()
 
     try:
-        # 1. Agent stuff
+        # 1. Agents stuff
 
         # 2. Store the loop itself
 
