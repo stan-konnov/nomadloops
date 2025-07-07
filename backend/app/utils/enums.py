@@ -38,5 +38,8 @@ class LoopStatus(str, Enum):
     # Loop is created
     READY = "ready"
 
+    # Loop creation failed
+    ERROR = "error"
+
     # Loop is being created
     CREATING = "creating"

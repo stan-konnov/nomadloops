@@ -3,7 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
+from fastapi import BackgroundTasks
+
 from app.clients.redis_client import get_redis_client
+from app.jobs.create_loop import create_loop
 from app.utils.enums import LoopStatus
 
 if TYPE_CHECKING:
@@ -20,19 +23,23 @@ class LoopManagementService:
 
     async def start_loop_creation(
         self,
-        city: str,  # noqa: ARG002
-        monthly_budget: float | None,  # noqa: ARG002
-        selected_categories: list[PlaceCategory] | None,  # noqa: ARG002
+        city: str,
+        monthly_budget: float | None,
+        selected_categories: list[PlaceCategory] | None,
     ) -> str:
         """Start the loop creation process and return a unique loop ID."""
 
         loop_id = str(uuid4())
 
-        await self.redis_client.set(
+        background_tasks = BackgroundTasks()
+        background_tasks.add_task(
+            create_loop,
             loop_id,
-            {
-                "status": LoopStatus.CREATING.value,
-            },
+            city,
+            monthly_budget,
+            selected_categories,
         )
+
+        await self.redis_client.set(f"{loop_id}:status", LoopStatus.CREATING.value)
 
         return loop_id
