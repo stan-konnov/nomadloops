@@ -72,15 +72,15 @@ Each loop object in the array must have the following structure:
 - Return **only** a valid and complete JSON array of loop objects.
 - Do NOT include any explanation, commentary, or text before or after the JSON.
 - Do NOT return malformed or partial JSON — ensure it is valid and complete.
-- ⚠️ Including categories NOT present in the user-provided `categories` list is INVALID.
+- ⚠️ Including categories NOT present in the user-provided `selected_categories` list is INVALID.
 
 ---
 
 📋 EXAMPLE USER INPUT:
 {
   "city": "Bangkok",
-  "budget": 1500,
-  "categories": ["living", "working", "training"]
+  "monthly_budget": 1500,
+  "selected_categories": ["living", "working", "training"]
 }
 
 📋 EXAMPLE OUTPUT:
