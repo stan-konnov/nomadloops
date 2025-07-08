@@ -3,7 +3,7 @@ from __future__ import annotations
 from json import dumps, loads
 from logging import getLogger
 
-from huggingface_hub import InferenceClient
+from huggingface_hub import AsyncInferenceClient
 
 from app.clients.redis_client import get_redis_client
 from app.settings import HUGGINGFACE_API_TOKEN, LLM_MODEL_ID
@@ -22,7 +22,7 @@ async def generate_loops(
     """Query LLM to generate nomad loops for a given city."""
 
     redis_client = get_redis_client()
-    huggingface_client = InferenceClient(api_key=HUGGINGFACE_API_TOKEN)
+    huggingface_client = AsyncInferenceClient(api_key=HUGGINGFACE_API_TOKEN)
 
     logger.info(
         f"Generating {number_of_loops_to_generate} loop(s) for {city}, "
@@ -53,7 +53,7 @@ async def generate_loops(
         ]
 
         # Query the LLM to generate loops
-        llm_response = huggingface_client.chat.completions.create(
+        llm_response = await huggingface_client.chat.completions.create(
             model=LLM_MODEL_ID,
             messages=messages,
             max_tokens=2048,
