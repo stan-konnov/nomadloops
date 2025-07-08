@@ -35,7 +35,7 @@ class LoopsManagementService:
 
         if currently_running_job_status == LoopsGenerationStatus.GENERATING.value:
             raise LoopGenerationProcessAlreadyRunningError(
-                "A loop generation is already in progress. "
+                "Loops generation is already in progress. "
                 "Please wait until it completes.",
             )
 

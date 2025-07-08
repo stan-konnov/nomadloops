@@ -23,19 +23,19 @@ router = APIRouter(prefix="/loops")
                 "application/json": {
                     "example": {
                         "success": True,
-                        "message": "Loop generation started successfully.",
+                        "message": "Loops generation started successfully.",
                     },
                 },
             },
         },
         HTTPStatus.BAD_REQUEST: {
-            "description": "Loop generation process is already running.",
+            "description": "Loops generation process is already running.",
             "content": {
                 "application/json": {
                     "example": {
                         "success": False,
                         "message": (
-                            "A loop generation is already in progress. "
+                            "Loops generation is already in progress. "
                             "Please wait until it completes."
                         ),
                     },
@@ -76,6 +76,6 @@ async def start_building_loops(
         status_code=HTTPStatus.CREATED,
         content=BaseApiResponseDto(
             success=True,
-            message="Loop generation started successfully.",
+            message="Loops generation started successfully.",
         ).model_dump(),
     )
