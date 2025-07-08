@@ -1,4 +1,5 @@
-from os import getenv
+from os import curdir, getenv
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -10,3 +11,6 @@ VERSION = str(getenv("VERSION"))
 REDIS_URL = str(getenv("REDIS_URL"))
 ENVIRONMENT = str(getenv("ENVIRONMENT"))
 OPENAI_API_KEY = str(getenv("OPENAI_API_KEY"))
+
+ROOT_DIR = Path(curdir).resolve()
+PROMPTS_DIR = Path(f"{ROOT_DIR}/app/prompts")
