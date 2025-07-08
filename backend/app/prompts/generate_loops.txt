@@ -52,7 +52,8 @@ CATEGORY CLARIFICATIONS:
 ---
 
 GUIDELINES:
-- Always include one (and only one) item per requested category in each loop.
+- Always include one (and only one) item for each category explicitly listed in the user-provided `selected_categories`.
+- Do NOT include any items for categories not requested in the user-provided `selected_categories`.
 - If no real data is available for a category in the city, invent a plausible and culturally appropriate example.
 - If a monthly budget is provided, make all loops realistic within that budget.
 - If multiple loops are requested, ensure they are meaningfully different. For example:
