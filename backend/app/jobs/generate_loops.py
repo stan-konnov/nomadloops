@@ -69,7 +69,5 @@ async def generate_loops(
         await redis_client.set("status", LoopsGenerationStatus.READY.value)
 
     except Exception:
-        logger.exception(
-            f"Error generating loops for {city}",
-        )
+        logger.exception(f"Error generating loops for {city}")
         await redis_client.set("status", LoopsGenerationStatus.ERROR.value)
