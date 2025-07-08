@@ -56,7 +56,7 @@ async def generate_loops(
         llm_response = await huggingface_client.chat.completions.create(
             model=LLM_MODEL_ID,
             messages=messages,
-            max_tokens=2048,
+            max_tokens=8000,
             temperature=0.7,
         )
         llm_response_content = llm_response.choices[0].message.content
