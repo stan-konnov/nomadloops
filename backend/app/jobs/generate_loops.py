@@ -19,7 +19,7 @@ async def generate_loops(
     selected_categories: list[PlaceCategory],
     number_of_loops_to_generate: int,
 ) -> None:
-    """Query LLM to generate nomad loops for a given city."""
+    """Query LLM to generate loops for a given city."""
 
     redis_client = get_redis_client()
     huggingface_client = AsyncInferenceClient(api_key=HUGGINGFACE_API_TOKEN)

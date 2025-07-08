@@ -17,7 +17,7 @@ class LoopsManagementService:
     """Service for managing loops."""
 
     def __init__(self) -> None:
-        """Construct Loop Management Service."""
+        """Construct Loops Management Service."""
 
         self.redis_client = get_redis_client()
 
@@ -29,7 +29,7 @@ class LoopsManagementService:
         number_of_loops_to_generate: int,
         background_tasks: BackgroundTasks,
     ) -> None:
-        """Start the loop creation process and return a unique loop ID."""
+        """Start loops creation process."""
 
         currently_running_job_status = await self.redis_client.get("status")
 

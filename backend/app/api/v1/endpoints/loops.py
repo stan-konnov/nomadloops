@@ -52,7 +52,7 @@ async def start_building_loops(
     ],
     background_tasks: BackgroundTasks,
 ) -> JSONResponse:
-    """Kick off agents in the background to build the loops."""
+    """Kick off agent in the background to build the loops."""
 
     try:
         await loops_management_service.start_loop_creation(
