@@ -58,6 +58,7 @@ async def start_building_loops(
             city=request.city,
             monthly_budget=request.monthly_budget,
             selected_categories=request.selected_categories,
+            number_of_loops_to_generate=request.number_of_loops_to_generate,
         )
 
     except LoopGenerationProcessAlreadyRunningError as error:

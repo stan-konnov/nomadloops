@@ -14,8 +14,9 @@ logger = getLogger(__name__)
 
 async def generate_loops(
     city: str,
-    monthly_budget: float | None,
-    selected_categories: list[PlaceCategory] | None,
+    monthly_budget: float,
+    selected_categories: list[PlaceCategory],
+    number_of_loops_to_generate: int,
 ) -> None:
     """Query LLM to generate nomad loops for a given city."""
 
@@ -23,18 +24,16 @@ async def generate_loops(
     redis_client = get_redis_client()
 
     logger.info(
-        f"Generating loops for city: {city}, "
+        f"Generating {number_of_loops_to_generate} loop(s) for {city}, "
         f"budget: {monthly_budget}, categories: {selected_categories}",
     )
 
     try:
-        # Use provided categories or default to all
-        _categories = selected_categories or [
-            category.value for category in PlaceCategory
-        ]
-
         # Load in the prompt from the file
         prompt = PromptReader.read_prompt("generate_loops")
+
+        # Get categories strings from the selected categories
+        _categories = [category.value for category in selected_categories]
 
         _system = {
             "role": "system",

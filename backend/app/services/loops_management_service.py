@@ -24,8 +24,9 @@ class LoopsManagementService:
     async def start_loop_creation(
         self,
         city: str,
-        monthly_budget: float | None,
-        selected_categories: list[PlaceCategory] | None,
+        monthly_budget: float,
+        selected_categories: list[PlaceCategory],
+        number_of_loops_to_generate: int,
     ) -> None:
         """Start the loop creation process and return a unique loop ID."""
 
@@ -43,6 +44,7 @@ class LoopsManagementService:
             city,
             monthly_budget,
             selected_categories,
+            number_of_loops_to_generate,
         )
 
         await self.redis_client.set("status", LoopsGenerationStatus.GENERATING.value)
