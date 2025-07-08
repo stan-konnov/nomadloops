@@ -32,6 +32,6 @@ class CreateLoopsRequestDto(BaseModel):
     number_of_loops_to_generate: int = Field(
         1,
         ge=1,
-        le=10,
-        description=("Number of loops to generate. Defaults to 1, maximum is 10."),
+        le=5,
+        description=("Number of loops to generate. Defaults to 1, maximum is 5."),
     )
