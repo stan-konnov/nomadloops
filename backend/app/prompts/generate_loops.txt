@@ -68,6 +68,14 @@ Each loop object in the array must have the following structure:
 
 ---
 
+🌐 GEOGRAPHICAL PROXIMITY:
+✅ Within each loop, select places that are **geographically as close to each other as reasonably possible**, ideally within walking distance or the same neighborhood or district.
+✅ Do NOT scatter the places randomly across the city — prioritize compactness and proximity.
+✅ The chosen places in a loop should form a coherent, convenient route for a nomad to visit or use, minimizing travel time between them.
+✅ When selecting multiple loops, you may choose different neighborhoods for each, but each individual loop must remain geographically cohesive.
+
+---
+
 🔍 VALIDATION:
 - Return **only** a valid and complete JSON array of loop objects.
 - Do NOT include any explanation, commentary, or text before or after the JSON.
