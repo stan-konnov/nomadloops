@@ -1,7 +1,7 @@
 from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, BackgroundTasks, Depends
 from fastapi.responses import JSONResponse
 
 from app.api.dtos.base_api_response import BaseApiResponseDto
@@ -50,6 +50,7 @@ async def start_building_loops(
         LoopsManagementService,
         Depends(LoopsManagementService),
     ],
+    background_tasks: BackgroundTasks,
 ) -> JSONResponse:
     """Kick off agents in the background to build the loops."""
 
@@ -59,6 +60,7 @@ async def start_building_loops(
             monthly_budget=request.monthly_budget,
             selected_categories=request.selected_categories,
             number_of_loops_to_generate=request.number_of_loops_to_generate,
+            background_tasks=background_tasks,
         )
 
     except LoopGenerationProcessAlreadyRunningError as error:
