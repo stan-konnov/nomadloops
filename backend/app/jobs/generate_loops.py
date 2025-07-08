@@ -1,18 +1,14 @@
 from __future__ import annotations
 
-from json import dumps
+from json import dumps, loads
 from logging import getLogger
-from typing import TYPE_CHECKING
 
-from openai import AsyncOpenAI
+from huggingface_hub import InferenceClient
 
 from app.clients.redis_client import get_redis_client
-from app.settings import OPENAI_API_KEY
+from app.settings import HUGGINGFACE_API_TOKEN, LLM_MODEL_ID
 from app.utils.enums import LoopsGenerationStatus, PlaceCategory
 from app.utils.prompt_reader import PromptReader
-
-if TYPE_CHECKING:
-    from openai.types.chat import ChatCompletionMessageParam
 
 logger = getLogger(__name__)
 
@@ -26,7 +22,7 @@ async def generate_loops(
     """Query LLM to generate nomad loops for a given city."""
 
     redis_client = get_redis_client()
-    openai_api_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+    huggingface_client = InferenceClient(api_key=HUGGINGFACE_API_TOKEN)
 
     logger.info(
         f"Generating {number_of_loops_to_generate} loop(s) for {city}, "
@@ -37,8 +33,8 @@ async def generate_loops(
         # Load in the prompt from the file
         prompt = PromptReader.read_prompt("generate_loops")
 
-        # Construct the messages for the OpenAI API
-        messages: list[ChatCompletionMessageParam] = [
+        # Define messages for the LLM
+        messages = [
             {
                 "role": "system",
                 "content": prompt,
@@ -56,19 +52,20 @@ async def generate_loops(
             },
         ]
 
-        # Call OpenAI API
-        llm_response = await openai_api_client.chat.completions.create(
-            model="gpt-4o",
+        # Query the LLM to generate loops
+        llm_response = huggingface_client.chat.completions.create(
+            model=LLM_MODEL_ID,
             messages=messages,
+            max_tokens=2048,
             temperature=0.7,
-            max_tokens=3000,
         )
+        llm_response_content = llm_response.choices[0].message.content
 
-        # Extract the content from the response
-        content = llm_response.choices[0].message.content
+        # Parse out JSON from the response content
+        generated_loops = loads(llm_response_content)  # type: ignore  # noqa: PGH003
 
-        # And store the generated loops in Redis
-        await redis_client.set("loops", dumps(content))
+        # If all good, store the generated loops in Redis
+        await redis_client.set("loops", generated_loops)
         await redis_client.set("status", LoopsGenerationStatus.READY.value)
 
     except Exception:
