@@ -51,7 +51,7 @@ CATEGORY CLARIFICATIONS:
 
 ---
 
-💡 GUIDELINES:
+GUIDELINES:
 - Always include one (and only one) item per requested category in each loop.
 - If no real data is available for a category in the city, invent a plausible and culturally appropriate example.
 - If a monthly budget is provided, make all loops realistic within that budget.
@@ -67,14 +67,14 @@ CATEGORY CLARIFICATIONS:
 
 ---
 
-📝 VALIDATION:
+VALIDATION:
 - Return **only** a valid and complete JSON array of loop objects.
 - Do NOT include any explanation, commentary, or text before or after the JSON.
 - Do NOT return malformed or partial JSON — ensure it is valid and complete.
 
 ---
 
-📋 EXAMPLE OUTPUT:
+EXAMPLE OUTPUT:
 [
     {
         "city": "Bangkok",
