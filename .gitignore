@@ -1,0 +1,14 @@
+# Shared
+**/.env
+**/.DS_Store
+
+# Backend
+**/venv
+**/__pycache__
+**/.coverage*
+!.coveragerc
+*.egg-info/
+
+# Frontend
+**/node_modules
+**/dist
