@@ -1,0 +1,37 @@
+repos:
+  # Backend
+  - repo: local
+    hooks:
+      - id: ruff-lint
+        name: Ruff Lint (backend)
+        entry: backend/venv/bin/ruff
+        language: system
+        args: [ "check", "--fix", "-q" ]
+        files: ^backend/
+
+      - id: ruff-format
+        name: Ruff Format (backend)
+        entry: backend/venv/bin/ruff
+        language: system
+        args: [ "format", "-q" ]
+        files: ^backend/
+
+  # Frontend
+  - repo: local
+    hooks:
+      - id: prettier
+        name: Prettier (frontend)
+        entry: npx prettier --write
+        language: system
+        files: ^frontend/
+
+  # Frontend
+  - repo: local
+    hooks:
+      - id: eslint
+        name: ESLint (frontend)
+        # Eslint cannot resolve it's own config
+        # in child directory, thus, we cd and run it
+        entry: bash -c 'cd frontend && npx eslint'
+        language: system
+        files: ^frontend/
