@@ -21,7 +21,7 @@ repos:
   - repo: local
     hooks:
       - id: eslint
-        name: eslint (frontend)
+        name: eslint
         entry: npx eslint
         language: system
         types: [javascript, jsx, ts, tsx]
