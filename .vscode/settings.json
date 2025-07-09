@@ -36,6 +36,7 @@
     "typescript.preferences.importModuleSpecifier": "non-relative",
 
     "[typescript]": {
+      "editor.tabSize": 2,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
@@ -44,6 +45,7 @@
         },
     },
     "[typescriptreact]": {
+      "editor.tabSize": 2,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
