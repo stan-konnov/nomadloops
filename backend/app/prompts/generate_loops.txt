@@ -20,7 +20,7 @@ Each loop object in the array must have the following structure:
 
 {
     "city": "<exact name of the city as provided>",
-    "items": [
+    "places": [
         {
             "name": "<realistic name of the place>",
             "category": "<one of the requested categories>",
@@ -95,7 +95,7 @@ Each loop object in the array must have the following structure:
 [
     {
         "city": "Bangkok",
-        "items": [
+        "places": [
             {
                 "name": "Nomad Nest Hostel",
                 "category": "living",
