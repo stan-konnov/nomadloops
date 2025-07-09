@@ -1,14 +1,22 @@
 repos:
   # Backend
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.2
+  - repo: local
     hooks:
-      - id: ruff
-        types_or: [ python, jupyter ]
-        args: [ --fix, -q ]
+      - id: ruff-lint
+        name: Ruff lint (backend)
+        entry: backend/venv/bin/ruff
+        language: system
+        types_or: [python, jupyter]
+        args: [ "--fix", "-q" ]
+        files: ^backend/
+
       - id: ruff-format
-        args: [ -q ]
-        types_or: [ python, jupyter ]
+        name: Ruff format (backend)
+        entry: backend/venv/bin/ruff
+        language: system
+        types_or: [python, jupyter]
+        args: [ "format", "-q" ]
+        files: ^backend/
 
   # Frontend
   - repo: local
