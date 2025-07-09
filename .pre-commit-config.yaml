@@ -25,7 +25,7 @@ repos:
         name: Prettier (frontend)
         entry: npx prettier --config frontend/.prettierrc.json --write
         language: system
-        files: ^frontend/.*\.(js|jsx|ts|tsx|css|scss|json|md|yml|yaml)$
+        files: ^frontend/
 
   # Frontend
   - repo: local
@@ -35,4 +35,4 @@ repos:
         entry: npx eslint
         language: system
         types: [javascript, jsx, ts, tsx]
-        files: ^frontend/.*\.(js|jsx|ts|tsx|css|scss|json|md|yml|yaml)$
+        files: ^frontend/
