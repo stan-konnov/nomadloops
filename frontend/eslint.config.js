@@ -1,9 +1,8 @@
 import js from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
+import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import prettier from 'eslint-config-prettier';
 import prettierPlugin from 'eslint-plugin-prettier';
 
 export default [
@@ -23,7 +22,7 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint,
+      '@typescript-eslint': ts,
       react,
       'react-hooks': reactHooks,
       prettier: prettierPlugin,
@@ -34,10 +33,6 @@ export default [
       },
     },
     rules: {
-      ...react.configs.recommended.rules,
-      ...tseslint.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-
       'prettier/prettier': 'warn',
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
@@ -45,5 +40,4 @@ export default [
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
-  prettier,
 ];
