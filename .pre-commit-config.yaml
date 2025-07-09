@@ -21,7 +21,7 @@ repos:
     hooks:
       - id: prettier
         name: Prettier (frontend)
-        entry: npx prettier --config frontend/.prettierrc.json --write
+        entry: npx prettier --write
         language: system
         files: ^frontend/
 
