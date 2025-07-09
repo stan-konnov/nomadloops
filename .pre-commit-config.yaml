@@ -22,7 +22,7 @@ repos:
   - repo: local
     hooks:
       - id: prettier
-        name: prettier
+        name: Prettier (frontend)
         entry: npx prettier --config frontend/.prettierrc.json --write
         language: system
         files: ^frontend/.*\.(js|jsx|ts|tsx|css|scss|json|md|yml|yaml)$
@@ -31,8 +31,8 @@ repos:
   - repo: local
     hooks:
       - id: eslint
-        name: eslint
+        name: ESLint (frontend)
         entry: npx eslint
         language: system
         types: [javascript, jsx, ts, tsx]
-        files: ^frontend/
+        files: ^frontend/.*\.(js|jsx|ts|tsx|css|scss|json|md|yml|yaml)$
