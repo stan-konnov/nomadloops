@@ -5,9 +5,14 @@ from fastapi import APIRouter, BackgroundTasks, Depends
 from fastapi.responses import JSONResponse
 
 from app.api.dtos.base_api_response import BaseApiResponseDto
+from app.api.dtos.data_api_response import DataApiResponseDto
 from app.api.v1.dtos.create_loops_request import CreateLoopsRequestDto
-from app.errors.invariants import LoopGenerationProcessAlreadyRunningError
+from app.errors.invariants import (
+    LoopGenerationProcessAlreadyRunningError,
+    LoopGenerationProcessNotFoundError,
+)
 from app.services.loops_management_service import LoopsManagementService
+from app.utils.enums import LoopsGenerationStatus
 
 router = APIRouter(prefix="/loops")
 
@@ -77,5 +82,67 @@ async def start_building_loops(
         content=BaseApiResponseDto(
             success=True,
             message="Loops generation started successfully.",
+        ).model_dump(),
+    )
+
+
+@router.get(
+    "/status",
+    summary="Get loops generation status.",
+    description="Get the current status of the loops generation process.",
+    responses={
+        HTTPStatus.OK: {
+            "description": "Loops generation status retrieved successfully.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "success": True,
+                        "message": "Loops generation status retrieved successfully.",
+                        "data": LoopsGenerationStatus.GENERATING.value,
+                    },
+                },
+            },
+        },
+        HTTPStatus.NOT_FOUND: {
+            "description": "No loops generation process found.",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "success": False,
+                        "message": (
+                            "No loops generation process found. "
+                            "Please start a new generation process."
+                        ),
+                    },
+                },
+            },
+        },
+    },
+)
+async def get_loops_generation_status(
+    loops_management_service: Annotated[
+        LoopsManagementService,
+        Depends(LoopsManagementService),
+    ],
+) -> JSONResponse:
+    """Get loops generation status."""
+
+    try:
+        status = await loops_management_service.get_loops_generation_status()
+    except LoopGenerationProcessNotFoundError as error:
+        return JSONResponse(
+            status_code=HTTPStatus.NOT_FOUND,
+            content=BaseApiResponseDto(
+                success=False,
+                message=str(error),
+            ).model_dump(),
+        )
+
+    return JSONResponse(
+        status_code=HTTPStatus.OK,
+        content=DataApiResponseDto(
+            success=True,
+            message="Loops generation status retrieved successfully.",
+            data=status,
         ).model_dump(),
     )

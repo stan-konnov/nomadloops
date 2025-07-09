@@ -3,7 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from app.clients.redis_client import get_redis_client
-from app.errors.invariants import LoopGenerationProcessAlreadyRunningError
+from app.errors.invariants import (
+    LoopGenerationProcessAlreadyRunningError,
+    LoopGenerationProcessNotFoundError,
+)
 from app.jobs.generate_loops import generate_loops
 from app.utils.enums import LoopsGenerationStatus
 
@@ -48,3 +51,16 @@ class LoopsManagementService:
         )
 
         await self.redis_client.set("status", LoopsGenerationStatus.GENERATING.value)
+
+    async def get_loops_generation_status(self) -> str:
+        """Get loops generation status."""
+
+        status = await self.redis_client.get("status")
+
+        if not status:
+            raise LoopGenerationProcessNotFoundError(
+                "No loops generation process found. "
+                "Please start a new generation process.",
+            )
+
+        return str(status)
