@@ -30,6 +30,6 @@ repos:
     hooks:
       - id: eslint
         name: ESLint (frontend)
-        entry: npx eslint
+        entry: bash -c 'cd frontend && npx eslint'
         language: system
         files: ^frontend/
