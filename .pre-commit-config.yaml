@@ -10,8 +10,8 @@ repos:
         args: [ "check", "--fix", "-q" ]
         files: ^backend/
 
-      - id: ruff-Format
-        name: Ruff format (backend)
+      - id: ruff-format
+        name: Ruff Format (backend)
         entry: backend/venv/bin/ruff
         language: system
         types_or: [python, jupyter]
