@@ -3,14 +3,14 @@ repos:
   - repo: local
     hooks:
       - id: ruff-lint
-        name: Ruff lint (backend)
+        name: Ruff Lint (backend)
         entry: backend/venv/bin/ruff
         language: system
         types_or: [python, jupyter]
         args: [ "--fix", "-q" ]
         files: ^backend/
 
-      - id: ruff-format
+      - id: ruff-Format
         name: Ruff format (backend)
         entry: backend/venv/bin/ruff
         language: system
