@@ -30,6 +30,8 @@ repos:
     hooks:
       - id: eslint
         name: ESLint (frontend)
+        # Eslint cannot resolve it's own config
+        # in child directory, thus, we cd and run it
         entry: bash -c 'cd frontend && npx eslint'
         language: system
         files: ^frontend/
