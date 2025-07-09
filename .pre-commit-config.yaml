@@ -6,7 +6,6 @@ repos:
         name: Ruff Lint (backend)
         entry: backend/venv/bin/ruff
         language: system
-        types_or: [python, jupyter]
         args: [ "check", "--fix", "-q" ]
         files: ^backend/
 
@@ -14,7 +13,6 @@ repos:
         name: Ruff Format (backend)
         entry: backend/venv/bin/ruff
         language: system
-        types_or: [python, jupyter]
         args: [ "format", "-q" ]
         files: ^backend/
 
@@ -34,5 +32,4 @@ repos:
         name: ESLint (frontend)
         entry: npx eslint
         language: system
-        types: [javascript, jsx, ts, tsx]
         files: ^frontend/
