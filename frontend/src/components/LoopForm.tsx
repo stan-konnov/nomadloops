@@ -6,7 +6,7 @@ import { CreateLoopsRequestDto } from '@src/types/dtos/create.loops.request';
 export const LoopForm = ({ onSubmit }: { onSubmit: (data: CreateLoopsRequestDto) => void }) => {
   const [city, setCity] = useState('');
   const [monthlyBudget, setMonthlyBudget] = useState(1000);
-  const [selectedCategories, setSelectedCategories] = useState<PlaceCategory[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Set<PlaceCategory>>(new Set());
   const [numberOfLoopsToGenerate, setNumberOfLoopsToGenerate] = useState(1);
 
   const handleCityChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -29,11 +29,11 @@ export const LoopForm = ({ onSubmit }: { onSubmit: (data: CreateLoopsRequestDto)
     };
 
   const toggleCategory = (category: PlaceCategory) => {
-    setSelectedCategories((alreadySelected) =>
-      alreadySelected.includes(category)
-        ? alreadySelected.filter((selected) => selected !== category)
-        : [...alreadySelected, category],
-    );
+    setSelectedCategories((oldSet) => {
+      const newSet = new Set(oldSet);
+      newSet.has(category) ? newSet.delete(category) : newSet.add(category);
+      return newSet;
+    });
   };
 
   const handleSubmit = (event: FormEvent) => {
@@ -42,7 +42,7 @@ export const LoopForm = ({ onSubmit }: { onSubmit: (data: CreateLoopsRequestDto)
     onSubmit({
       city,
       monthlyBudget,
-      selectedCategories,
+      selectedCategories: Array.from(selectedCategories),
       numberOfLoopsToGenerate,
     });
   };
@@ -78,7 +78,7 @@ export const LoopForm = ({ onSubmit }: { onSubmit: (data: CreateLoopsRequestDto)
               key={category}
               onClick={handleCategoryClick(category)}
               className={`px-2 py-1 border rounded ${
-                selectedCategories.includes(category) ? 'bg-blue-500 text-white' : 'bg-gray-100'
+                selectedCategories.has(category) ? 'bg-blue-500 text-white' : 'bg-gray-100'
               }`}
             >
               {category}
