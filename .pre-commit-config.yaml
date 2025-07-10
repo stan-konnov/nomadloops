@@ -7,14 +7,14 @@ repos:
         entry: backend/venv/bin/ruff
         language: system
         args: [ "check", "--fix", "-q" ]
-        files: ^backend/
+        files: ^backend/.*\.py$
 
       - id: ruff-format
         name: Ruff Format (backend)
         entry: backend/venv/bin/ruff
         language: system
         args: [ "format", "-q" ]
-        files: ^backend/
+        files: ^backend/.*\.py$
 
   # Frontend
   - repo: local
@@ -23,15 +23,13 @@ repos:
         name: Prettier (frontend)
         entry: npx prettier --write
         language: system
-        files: ^frontend/
+        files: ^frontend/.*\.(ts|tsx|js|css)$
 
   # Frontend
   - repo: local
     hooks:
       - id: eslint
         name: ESLint (frontend)
-        # Eslint cannot resolve it's own config
-        # in child directory, thus, we cd and run it
         entry: bash -c 'cd frontend && npx eslint'
         language: system
-        files: ^frontend/
+        files: ^frontend/.*\.(ts|tsx|js)$
