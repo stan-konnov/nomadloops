@@ -37,7 +37,10 @@ export default [
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { ignoreEnums: true, argsIgnorePattern: '^_' },
+      ],
     },
   },
 ];
