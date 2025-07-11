@@ -4,13 +4,14 @@ from typing import Any
 import uvicorn
 from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.utils import get_openapi
 from fastapi.responses import HTMLResponse
 
 from app.api.router import router
 from app.clients.redis_client import RedisClient
-from app.settings import ENVIRONMENT, HOST, PORT, VERSION
+from app.settings import ENVIRONMENT, FRONTEND_URL, HOST, PORT, VERSION
 
 
 @asynccontextmanager
@@ -27,6 +28,14 @@ app = FastAPI(
     version=VERSION,
     title="NomadLoops API",
     description="An agent-powered API for generating digital nomad loops in any city.",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[FRONTEND_URL],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(router)

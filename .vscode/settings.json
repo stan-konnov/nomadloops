@@ -1,14 +1,15 @@
 {
   "files.exclude": {
     "**/venv": true,
+    "**/dist": true,
     "**/.coverage": true,
     "**/__pycache__": true,
     "**/__init__.py": true,
     "**/.ruff_cache": true,
     "**/.coverage.**": true,
+    "**/node_modules": true,
     "**/.pytest_cache": true,
     "**/nomadloops.egg-info": true,
-    "**/node_modules": true
   },
 
   "python.analysis.autoImportCompletions": true,
@@ -53,4 +54,6 @@
             "source.fixAll.eslint": "explicit"
         },
     },
+
+    "css.lint.unknownAtRules": "ignore",
 }

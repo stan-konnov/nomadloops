@@ -10,4 +10,5 @@ pytest-cov
 pytest-dotenv
 poethepoet
 redis
+aiohttp
 huggingface-hub

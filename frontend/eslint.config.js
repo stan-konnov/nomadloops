@@ -17,8 +17,10 @@ export default [
       },
       globals: {
         window: 'readonly',
-        document: 'readonly',
         console: 'readonly',
+        document: 'readonly',
+        HTMLInputElement: 'readonly',
+        HTMLButtonElement: 'readonly',
       },
     },
     plugins: {
