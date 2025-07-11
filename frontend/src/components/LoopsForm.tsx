@@ -48,6 +48,13 @@ export const LoopsForm = (): ReactElement => {
     });
   };
 
+  const isFormValid =
+    city.trim() !== '' &&
+    monthlyBudget > 0 &&
+    selectedCategories.size > 0 &&
+    numberOfLoopsToGenerate >= 1 &&
+    numberOfLoopsToGenerate <= 3;
+
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow w-96 space-y-4">
       <div>
@@ -102,7 +109,13 @@ export const LoopsForm = (): ReactElement => {
 
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        disabled={!isFormValid}
+        className={`w-full py-2 rounded 
+    ${
+      !isFormValid
+        ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+        : 'bg-blue-600 text-white hover:bg-blue-700'
+    }`}
       >
         Submit
       </button>
