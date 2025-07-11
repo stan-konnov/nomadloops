@@ -79,7 +79,7 @@ export const LoopsForm = (): ReactElement => {
 
       <div>
         <label className="block text-sm font-medium">Categories</label>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-col gap-2">
           {Object.values(PlaceCategory).map((category) => (
             <button
               type="button"
@@ -89,7 +89,8 @@ export const LoopsForm = (): ReactElement => {
                 selectedCategories.has(category) ? 'bg-blue-500 text-white' : 'bg-gray-100'
               }`}
             >
-              {category}
+              {/** Convert enum values to human readable format */}
+              {category.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
             </button>
           ))}
         </div>
