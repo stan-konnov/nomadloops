@@ -4,6 +4,13 @@ import { PlaceCategory } from '@src/utils/enums';
 import { createLoopsRequest } from '@src/api/loops.api';
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 
+/**
+ * TODO: Poll BE for status and disable submit button until loops are generated.
+ * TODO: Geocode city input to get coordinates and center map.
+ * TODO: Add error handling for API requests.
+ * TODO: Add loading state while waiting for API response.
+ * TODO: Render loops on the map after generation.
+ */
 export const LoopsForm = (): ReactElement => {
   const { city, setCity } = useLoopsPlannerStore();
 
