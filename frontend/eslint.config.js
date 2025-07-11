@@ -17,8 +17,10 @@ export default [
       },
       globals: {
         window: 'readonly',
-        document: 'readonly',
         console: 'readonly',
+        document: 'readonly',
+        HTMLInputElement: 'readonly',
+        HTMLButtonElement: 'readonly',
       },
     },
     plugins: {
@@ -37,10 +39,7 @@ export default [
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { ignoreEnums: true, argsIgnorePattern: '^_' },
-      ],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
 ];

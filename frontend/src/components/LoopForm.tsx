@@ -1,34 +1,35 @@
-import { useState, FormEvent, ChangeEvent, MouseEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, MouseEvent, ReactElement } from 'react';
 
 import { PlaceCategory } from '@src/utils/enums';
-import { CreateLoopsRequestDto } from '@src/types/dtos/create.loops.request';
+import { createLoopsRequest } from '@src/api/loops.api';
 
-export const LoopForm = ({ onSubmit }: { onSubmit: (data: CreateLoopsRequestDto) => void }) => {
+export const LoopForm = (): ReactElement => {
   const [city, setCity] = useState('');
   const [monthlyBudget, setMonthlyBudget] = useState(1000);
   const [selectedCategories, setSelectedCategories] = useState<Set<PlaceCategory>>(new Set());
   const [numberOfLoopsToGenerate, setNumberOfLoopsToGenerate] = useState(1);
 
-  const handleCityChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleCityChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setCity(event.target.value);
   };
 
-  const handleMonthlyBudgetChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleMonthlyBudgetChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setMonthlyBudget(Number(event.target.value));
   };
 
-  const handleNumberOfLoopsToGenerateChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleNumberOfLoopsToGenerateChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setNumberOfLoopsToGenerate(Number(event.target.value));
   };
 
   // Curry to consume the category and return a handler
   const handleCategoryClick =
-    (category: PlaceCategory) => (event: MouseEvent<HTMLButtonElement>) => {
+    (category: PlaceCategory) =>
+    (event: MouseEvent<HTMLButtonElement>): void => {
       event.preventDefault();
       toggleCategory(category);
     };
 
-  const toggleCategory = (category: PlaceCategory) => {
+  const toggleCategory = (category: PlaceCategory): void => {
     setSelectedCategories((oldSet) => {
       const newSet = new Set(oldSet);
       newSet.has(category) ? newSet.delete(category) : newSet.add(category);
@@ -36,10 +37,10 @@ export const LoopForm = ({ onSubmit }: { onSubmit: (data: CreateLoopsRequestDto)
     });
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent): void => {
     event.preventDefault();
 
-    onSubmit({
+    createLoopsRequest({
       city,
       monthlyBudget,
       selectedCategories: Array.from(selectedCategories),
