@@ -5,7 +5,7 @@ import { MapView } from '@src/components/MapView';
 export const LoopsPlanner = (): ReactElement => {
   return (
     <div className="flex h-screen">
-      <div className="w-1/3 bg-gray-50 p-4 overflow-y-auto">
+      <div className="w-1/3 bg-gray-50 p-4 overflow-y-auto flex justify-center items-center">
         <LoopsForm />
       </div>
 
