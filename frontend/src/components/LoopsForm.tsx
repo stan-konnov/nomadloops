@@ -37,10 +37,10 @@ export const LoopsForm = (): ReactElement => {
     });
   };
 
-  const handleSubmit = (event: FormEvent): void => {
+  const handleSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
 
-    createLoopsRequest({
+    await createLoopsRequest({
       city,
       monthlyBudget,
       selectedCategories: Array.from(selectedCategories),

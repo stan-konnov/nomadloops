@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+
 export enum PlaceCategory {
   // Apartments, hostels, Airbnbs
   LIVING = 'living',
