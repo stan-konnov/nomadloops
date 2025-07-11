@@ -1,10 +1,10 @@
 import { ReactElement } from 'react';
 import '@src/styles/index.css';
 
-import { LoopsForm } from '@src/components/LoopsForm';
+import { LoopsPlanner } from '@src/components/LoopsPlanner';
 
 const App = (): ReactElement => {
-  return <LoopsForm />;
+  return <LoopsPlanner />;
 };
 
 export default App;
