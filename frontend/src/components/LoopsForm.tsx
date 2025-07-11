@@ -3,7 +3,7 @@ import { useState, FormEvent, ChangeEvent, MouseEvent, ReactElement } from 'reac
 import { PlaceCategory } from '@src/utils/enums';
 import { createLoopsRequest } from '@src/api/loops.api';
 
-export const LoopForm = (): ReactElement => {
+export const LoopsForm = (): ReactElement => {
   const [city, setCity] = useState('');
   const [monthlyBudget, setMonthlyBudget] = useState(1000);
   const [selectedCategories, setSelectedCategories] = useState<Set<PlaceCategory>>(new Set());

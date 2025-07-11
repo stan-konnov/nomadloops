@@ -1,9 +1,10 @@
-import { ReactNode } from 'react';
-
+import { ReactElement } from 'react';
 import '@src/styles/index.css';
 
-const App = (): ReactNode => {
-  return <div className="text-center text-2xl text-blue-600 mt-20">🚀 NomadLoops Frontend</div>;
+import { LoopsForm } from '@src/components/LoopsForm';
+
+const App = (): ReactElement => {
+  return <LoopsForm />;
 };
 
 export default App;
