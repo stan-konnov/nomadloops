@@ -28,3 +28,17 @@ export enum PlaceCategory {
   // Police, fire stations, consulates
   EMERGENCY_ESSENTIALS = 'emergency_essentials',
 }
+
+export enum LoopsGenerationStatus {
+  // Loops are ready
+  READY = 'ready',
+
+  // Loops generation failed
+  ERROR = 'error',
+
+  // Loops generation is in progress
+  GENERATING = 'generating',
+
+  // Loops generation has not started yet
+  NOT_STARTED = 'not_started',
+}

@@ -16,9 +16,11 @@ export default [
         sourceType: 'module',
       },
       globals: {
-        window: 'readonly',
+        fetch: 'readonly',
         console: 'readonly',
         document: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
         HTMLInputElement: 'readonly',
         HTMLButtonElement: 'readonly',
       },

@@ -7,6 +7,7 @@ interface ViteTypeOptions {
 interface ImportMetaEnv {
   readonly VITE_API_URL: string;
   readonly VITE_API_VER: string;
+  readonly VITE_GEOCODE_API_URL: string;
 }
 
 interface ImportMeta {
