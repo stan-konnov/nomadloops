@@ -1,7 +1,6 @@
 import { useState, FormEvent, ChangeEvent, MouseEvent, ReactElement } from 'react';
 
 import { LoopsGenerationStatus, PlaceCategory } from '@src/utils/enums';
-import { createLoopsRequest } from '@src/api/loops.api';
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 
 /**
@@ -11,14 +10,15 @@ import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
  * TODO: Render loops on the map after generation.
  */
 export const LoopsForm = (): ReactElement => {
-  const { city, setCity, loopsGenerationStatus, setLoopsGenerationStatus } = useLoopsPlannerStore();
+  const { setCity, loopsGenerationStatus } = useLoopsPlannerStore();
 
+  const [localCityName, setLocalCityName] = useState('');
   const [monthlyBudget, setMonthlyBudget] = useState(1000);
   const [selectedCategories, setSelectedCategories] = useState<Set<PlaceCategory>>(new Set());
   const [numberOfLoopsToGenerate, setNumberOfLoopsToGenerate] = useState(1);
 
   const handleCityChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setCity(event.target.value);
+    setLocalCityName(event.target.value);
   };
 
   const handleMonthlyBudgetChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -47,22 +47,12 @@ export const LoopsForm = (): ReactElement => {
 
   const handleSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
-
-    const createLoopsResponse = await createLoopsRequest({
-      city,
-      monthlyBudget,
-      selectedCategories: Array.from(selectedCategories),
-      numberOfLoopsToGenerate,
-    });
-
-    if (createLoopsResponse.success) {
-      setLoopsGenerationStatus(LoopsGenerationStatus.GENERATING);
-    }
+    setCity(localCityName);
   };
 
   const isFormValid =
-    city.trim() !== '' &&
     monthlyBudget > 0 &&
+    localCityName.trim() !== '' &&
     selectedCategories.size > 0 &&
     numberOfLoopsToGenerate >= 1 &&
     numberOfLoopsToGenerate <= 3 &&
@@ -71,9 +61,9 @@ export const LoopsForm = (): ReactElement => {
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow w-96 space-y-4">
       <div>
-        <label className="block text-sm font-medium">City</label>
+        <label className="block text-sm font-medium">City Name</label>
         <input
-          value={city}
+          value={localCityName}
           onChange={handleCityChange}
           className="w-full border px-2 py-1 rounded"
         />

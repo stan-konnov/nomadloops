@@ -4,11 +4,55 @@ import { MapView } from '@src/components/MapView';
 import { LoopsForm } from '@src/components/LoopsForm';
 
 import { LoopsGenerationStatus } from '@src/utils/enums';
-import { getLoopsStatusRequest } from '@src/api/loops.api';
+import { createLoopsRequest, getLoopsStatusRequest } from '@src/api/loops.api';
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
+import { geocodeCity } from '@src/utils/geocode';
 
 export const LoopsPlanner = (): ReactElement => {
-  const { loopsGenerationStatus, setLoopsGenerationStatus } = useLoopsPlannerStore();
+  const { city, setCityCoordinates, loopsGenerationStatus, setLoopsGenerationStatus } =
+    useLoopsPlannerStore();
+
+  useEffect(() => {
+    if (city.trim() === '') {
+      return;
+    }
+
+    // First, geocode the city
+    // to get coordinates and center the map
+    const fetchAndSetCoordinates = async (): Promise<void> => {
+      try {
+        const cityCoordinates = await geocodeCity(city);
+        if (cityCoordinates) {
+          setCityCoordinates(cityCoordinates);
+        }
+      } catch (error) {
+        // TODO: Toast me
+        console.error('Error geocoding city:', error);
+      }
+    };
+    fetchAndSetCoordinates();
+
+    // Second, if all good,
+    // kick of loops generation process
+    const startLoopsGeneration = async (): Promise<void> => {
+      try {
+        const createLoopsResponse = await createLoopsRequest({
+          city,
+          monthlyBudget: 1000,
+          selectedCategories: [],
+          numberOfLoopsToGenerate: 1,
+        });
+
+        if (createLoopsResponse.success) {
+          setLoopsGenerationStatus(LoopsGenerationStatus.GENERATING);
+        }
+      } catch (error) {
+        // TODO: Toast me
+        console.error('Error creating loops:', error);
+      }
+    };
+    startLoopsGeneration();
+  }, [city]);
 
   useEffect(() => {
     if (loopsGenerationStatus === LoopsGenerationStatus.GENERATING) {
