@@ -15,73 +15,75 @@ import { geocodeCity } from '@src/utils/geocode';
  * TODO: Render loops on the map after generation.
  */
 export const LoopsPlanner = (): ReactElement => {
-  const { city, setCityCoordinates, loopsGenerationStatus, setLoopsGenerationStatus } =
-    useLoopsPlannerStore();
+  const {
+    city,
+    monthlyBudget,
+    selectedCategories,
+    numberOfLoopsToGenerate,
+    setCityCoordinates,
+    loopsGenerationStatus,
+    setLoopsGenerationStatus,
+  } = useLoopsPlannerStore();
 
   useEffect(() => {
     if (city.trim() === '') {
       return;
     }
 
-    // First, geocode the city
-    // to get coordinates and center the map
-    const fetchAndSetCoordinates = async (): Promise<void> => {
+    (async (): Promise<void> => {
       try {
+        // Geocode the city
+        // to get coordinates and center the map
         const cityCoordinates = await geocodeCity(city);
-        if (cityCoordinates) {
-          setCityCoordinates(cityCoordinates);
-        }
-      } catch (error) {
-        // TODO: Toast me
-        console.error('Error geocoding city:', error);
-        setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
+        setCityCoordinates(cityCoordinates);
 
-        return;
-      }
-    };
-    fetchAndSetCoordinates();
-
-    // Second, if all good,
-    // kick of loops generation process
-    const startLoopsGeneration = async (): Promise<void> => {
-      try {
-        const createLoopsResponse = await createLoopsRequest({
+        // If the city is valid,
+        // kick off the loops generation
+        await createLoopsRequest({
           city,
-          monthlyBudget: 1000,
-          selectedCategories: [],
-          numberOfLoopsToGenerate: 1,
+          monthlyBudget,
+          selectedCategories: Array.from(selectedCategories),
+          numberOfLoopsToGenerate,
         });
-
-        if (createLoopsResponse.success) {
-          setLoopsGenerationStatus(LoopsGenerationStatus.GENERATING);
-        }
+        setLoopsGenerationStatus(LoopsGenerationStatus.GENERATING);
       } catch (error) {
         // TODO: Toast me
         console.error('Error creating loops:', error);
         setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
-
-        return;
       }
-    };
-    startLoopsGeneration();
-  }, [city]);
+    })();
+  }, [city, monthlyBudget, selectedCategories, numberOfLoopsToGenerate]);
 
   useEffect(() => {
-    if (loopsGenerationStatus === LoopsGenerationStatus.GENERATING) {
-      const interval = setInterval(async () => {
+    if (loopsGenerationStatus !== LoopsGenerationStatus.GENERATING) {
+      return;
+    }
+
+    const interval = setInterval(async () => {
+      try {
         const loopsStatusResponse = await getLoopsStatusRequest();
 
         if (loopsStatusResponse.data) {
           setLoopsGenerationStatus(loopsStatusResponse.data);
-        }
-      }, 1000);
 
-      if (
-        [LoopsGenerationStatus.READY, LoopsGenerationStatus.ERROR].includes(loopsGenerationStatus)
-      ) {
-        return (): void => clearInterval(interval);
+          // Clear the interval if the status is ready or error
+          if (
+            [LoopsGenerationStatus.READY, LoopsGenerationStatus.ERROR].includes(
+              loopsStatusResponse.data,
+            )
+          ) {
+            clearInterval(interval);
+          }
+        }
+      } catch (error) {
+        console.error('Error polling job status', error);
+        setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
+        clearInterval(interval);
       }
-    }
+    }, 1000);
+
+    // Clear the interval on component unmount
+    return (): void => clearInterval(interval);
   }, [loopsGenerationStatus]);
 
   return (
