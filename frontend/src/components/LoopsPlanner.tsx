@@ -8,6 +8,12 @@ import { createLoopsRequest, getLoopsStatusRequest } from '@src/api/loops.api';
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 import { geocodeCity } from '@src/utils/geocode';
 
+/**
+ * TODO: Geocode city input to get coordinates and center map.
+ * TODO: Add error handling for API requests.
+ * TODO: Add loading state while waiting for API response.
+ * TODO: Render loops on the map after generation.
+ */
 export const LoopsPlanner = (): ReactElement => {
   const { city, setCityCoordinates, loopsGenerationStatus, setLoopsGenerationStatus } =
     useLoopsPlannerStore();
@@ -28,6 +34,9 @@ export const LoopsPlanner = (): ReactElement => {
       } catch (error) {
         // TODO: Toast me
         console.error('Error geocoding city:', error);
+        setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
+
+        return;
       }
     };
     fetchAndSetCoordinates();
@@ -49,6 +58,9 @@ export const LoopsPlanner = (): ReactElement => {
       } catch (error) {
         // TODO: Toast me
         console.error('Error creating loops:', error);
+        setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
+
+        return;
       }
     };
     startLoopsGeneration();

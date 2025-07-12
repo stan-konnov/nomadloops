@@ -3,12 +3,6 @@ import { useState, FormEvent, ChangeEvent, MouseEvent, ReactElement } from 'reac
 import { LoopsGenerationStatus, PlaceCategory } from '@src/utils/enums';
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 
-/**
- * TODO: Geocode city input to get coordinates and center map.
- * TODO: Add error handling for API requests.
- * TODO: Add loading state while waiting for API response.
- * TODO: Render loops on the map after generation.
- */
 export const LoopsForm = (): ReactElement => {
   const {
     setCity,
