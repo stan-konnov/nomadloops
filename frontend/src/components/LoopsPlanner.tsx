@@ -9,7 +9,7 @@ import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 import { geocodeCity } from '@src/utils/geocode';
 
 /**
- * TODO: Geocode city input to get coordinates and center map.
+ * TODO: Center map.
  * TODO: Add error handling for API requests.
  * TODO: Add loading state while waiting for API response.
  * TODO: Render loops on the map after generation.
