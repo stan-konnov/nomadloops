@@ -38,4 +38,7 @@ export enum LoopsGenerationStatus {
 
   // Loops generation is in progress
   GENERATING = 'generating',
+
+  // Loops generation has not started yet
+  NOT_STARTED = 'not_started',
 }
