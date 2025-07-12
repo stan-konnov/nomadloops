@@ -10,12 +10,18 @@ import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
  * TODO: Render loops on the map after generation.
  */
 export const LoopsForm = (): ReactElement => {
-  const { setCity, loopsGenerationStatus } = useLoopsPlannerStore();
+  const {
+    setCity,
+    monthlyBudget,
+    setMonthlyBudget,
+    selectedCategories,
+    setSelectedCategories,
+    numberOfLoopsToGenerate,
+    setNumberOfLoopsToGenerate,
+    loopsGenerationStatus,
+  } = useLoopsPlannerStore();
 
   const [localCityName, setLocalCityName] = useState('');
-  const [monthlyBudget, setMonthlyBudget] = useState(1000);
-  const [selectedCategories, setSelectedCategories] = useState<Set<PlaceCategory>>(new Set());
-  const [numberOfLoopsToGenerate, setNumberOfLoopsToGenerate] = useState(1);
 
   const handleCityChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setLocalCityName(event.target.value);
@@ -38,11 +44,9 @@ export const LoopsForm = (): ReactElement => {
     };
 
   const toggleCategory = (category: PlaceCategory): void => {
-    setSelectedCategories((oldSet) => {
-      const newSet = new Set(oldSet);
-      newSet.has(category) ? newSet.delete(category) : newSet.add(category);
-      return newSet;
-    });
+    const newSet = new Set(selectedCategories);
+    newSet.has(category) ? newSet.delete(category) : newSet.add(category);
+    setSelectedCategories(newSet);
   };
 
   const handleSubmit = async (event: FormEvent): Promise<void> => {
