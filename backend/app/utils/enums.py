@@ -38,8 +38,8 @@ class LoopsGenerationStatus(str, Enum):
     # Loops are ready
     READY = "ready"
 
-    # Loop generation failed
+    # Loops generation failed
     ERROR = "error"
 
-    # Loop generation is in progress
+    # Loops generation is in progress
     GENERATING = "generating"
