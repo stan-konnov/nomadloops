@@ -56,12 +56,20 @@ export const LoopsForm = (): ReactElement => {
     setNumberOfLoopsToGenerate(localNumberOfLoopsToGenerate);
   };
 
+  const localStateDivergedFromGlobal =
+    localCityName.trim() !== city ||
+    localMonthlyBudget !== monthlyBudget ||
+    localNumberOfLoopsToGenerate !== numberOfLoopsToGenerate ||
+    localSelectedCategories.size !== selectedCategories.size ||
+    [...localSelectedCategories].some((c) => !selectedCategories.has(c));
+
   const isFormValid =
     localMonthlyBudget > 0 &&
     localCityName.trim() !== '' &&
     localSelectedCategories.size > 0 &&
     localNumberOfLoopsToGenerate >= 1 &&
     localNumberOfLoopsToGenerate <= 3 &&
+    localStateDivergedFromGlobal &&
     loopsGenerationStatus !== LoopsGenerationStatus.GENERATING;
 
   return (
