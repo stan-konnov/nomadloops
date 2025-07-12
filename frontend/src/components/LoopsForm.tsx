@@ -1,6 +1,6 @@
 import { useState, FormEvent, ChangeEvent, MouseEvent, ReactElement } from 'react';
 
-import { PlaceCategory } from '@src/utils/enums';
+import { LoopsGenerationStatus, PlaceCategory } from '@src/utils/enums';
 import { createLoopsRequest } from '@src/api/loops.api';
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 
@@ -12,7 +12,7 @@ import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
  * TODO: Render loops on the map after generation.
  */
 export const LoopsForm = (): ReactElement => {
-  const { city, setCity } = useLoopsPlannerStore();
+  const { city, setCity, loopsGenerationStatus, setLoopsGenerationStatus } = useLoopsPlannerStore();
 
   const [monthlyBudget, setMonthlyBudget] = useState(1000);
   const [selectedCategories, setSelectedCategories] = useState<Set<PlaceCategory>>(new Set());
@@ -49,12 +49,16 @@ export const LoopsForm = (): ReactElement => {
   const handleSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
 
-    await createLoopsRequest({
+    const createLoopsResponse = await createLoopsRequest({
       city,
       monthlyBudget,
       selectedCategories: Array.from(selectedCategories),
       numberOfLoopsToGenerate,
     });
+
+    if (createLoopsResponse.success) {
+      setLoopsGenerationStatus(LoopsGenerationStatus.GENERATING);
+    }
   };
 
   const isFormValid =
@@ -62,7 +66,8 @@ export const LoopsForm = (): ReactElement => {
     monthlyBudget > 0 &&
     selectedCategories.size > 0 &&
     numberOfLoopsToGenerate >= 1 &&
-    numberOfLoopsToGenerate <= 3;
+    numberOfLoopsToGenerate <= 3 &&
+    loopsGenerationStatus !== LoopsGenerationStatus.GENERATING;
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow w-96 space-y-4">

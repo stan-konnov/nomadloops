@@ -19,6 +19,8 @@ export default [
         window: 'readonly',
         console: 'readonly',
         document: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
         HTMLInputElement: 'readonly',
         HTMLButtonElement: 'readonly',
       },

@@ -88,7 +88,7 @@ async def start_building_loops(
 
 
 @router.get(
-    "/status",
+    "/status/",
     summary="Get loops generation status.",
     description="Get the current status of the loops generation process.",
     responses={
