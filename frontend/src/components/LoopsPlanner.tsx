@@ -11,15 +11,21 @@ export const LoopsPlanner = (): ReactElement => {
   const { loopsGenerationStatus, setLoopsGenerationStatus } = useLoopsPlannerStore();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      const loopsStatusResponse = await getLoopsStatusRequest();
+    if (loopsGenerationStatus === LoopsGenerationStatus.GENERATING) {
+      const interval = setInterval(async () => {
+        const loopsStatusResponse = await getLoopsStatusRequest();
 
-      if (loopsStatusResponse.data?.status) {
-        setLoopsGenerationStatus(loopsStatusResponse.data.status as LoopsGenerationStatus);
+        if (loopsStatusResponse.data) {
+          setLoopsGenerationStatus(loopsStatusResponse.data);
+        }
+      }, 1000);
+
+      if (
+        [LoopsGenerationStatus.READY, LoopsGenerationStatus.ERROR].includes(loopsGenerationStatus)
+      ) {
+        return (): void => clearInterval(interval);
       }
-    }, 1000);
-
-    return (): void => clearInterval(interval);
+    }
   }, [loopsGenerationStatus]);
 
   return (
