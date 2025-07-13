@@ -17,6 +17,35 @@ services:
       - "11434:11434"
     volumes:
       - ollama-data-container:/root/.ollama
+    environment:
+      - LLM_MODEL_ID=${LLM_MODEL_ID}
+    env_file:
+      - ./backend/.env
+    entrypoint: >
+      sh -c '
+          LLM_MODEL_ID="${LLM_MODEL_ID}";
+
+          echo "Installing curl…";
+          apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*;
+
+          echo "Starting Ollama server & pre-pulling model: $LLM_MODEL_ID";
+
+          # start server in background
+          ollama serve &
+
+          # wait for server to be ready
+          until curl -s -o /dev/null http://localhost:11434/; do
+            echo "Waiting for Ollama…";
+            sleep 1;
+          done
+
+          # pull model
+          echo "Pulling model: $LLM_MODEL_ID"
+          curl -s -X POST http://localhost:11434/api/pull -d "{\"name\": \"$LLM_MODEL_ID\"}"
+
+          echo "Model pulled — keeping server running"
+          wait
+        '
 
 volumes:
   redis-data-container:
