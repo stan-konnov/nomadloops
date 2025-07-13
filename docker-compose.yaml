@@ -8,6 +8,15 @@ services:
       - "6379:6379"
     volumes:
       - redis-data-container:/data
+  ollama:
+    image: ollama/ollama
+    container_name: nomadloops-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data-container:/root/.ollama
+    restart: unless-stopped
 
 volumes:
   redis-data-container:
+  ollama-data-container:
