@@ -25,16 +25,16 @@ const MapCenterUpdater = ({
 
     if (!hasZoomed.current) {
       // Animate to coordinates and zoom on first render
-      map.flyTo(coordinates, zoom);
+      map.flyTo(coordinates, map.getZoom());
     } else {
       // Animate to coordinates but keep current zoom on user zoom
-      map.flyTo(coordinates, map.getZoom());
+      map.flyTo(coordinates, zoom);
     }
 
     return (): void => {
       map.off('zoomend', onUserZoom);
     };
-  }, [coordinates, zoom, map]);
+  }, [coordinates.toString(), zoom, map]);
 
   return null;
 };
@@ -50,7 +50,7 @@ export const MapView = (): ReactElement => {
       : defaultCenter;
 
   const defaultZoom = 5;
-  const zoomOnInput = cityCoordinates?.lat && cityCoordinates?.lng ? 10 : defaultZoom;
+  const zoomOnInput = cityCoordinates?.lat && cityCoordinates?.lng ? 12 : defaultZoom;
 
   return (
     <MapContainer
