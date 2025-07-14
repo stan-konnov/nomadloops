@@ -1,4 +1,5 @@
 import { ReactElement, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 import { MapView } from '@src/components/MapView';
 import { LoopsForm } from '@src/components/LoopsForm';
@@ -8,9 +9,6 @@ import { createLoopsRequest, getLoopsRequest, getLoopsStatusRequest } from '@src
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 import { geocodeCity } from '@src/utils/geocode';
 
-/**
- * TODO: Add error handling for API requests.
- */
 export const LoopsPlanner = (): ReactElement => {
   const {
     city,
@@ -45,9 +43,8 @@ export const LoopsPlanner = (): ReactElement => {
         });
         setLoopsGenerationStatus(LoopsGenerationStatus.GENERATING);
       } catch (error) {
-        // TODO: Toast me
-        console.error('Error creating loops:', error);
         setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
+        toast.error(error instanceof Error ? error.message : 'Unknown error');
       }
     })();
   }, [city, monthlyBudget, selectedCategories, numberOfLoopsToGenerate]);
@@ -84,9 +81,9 @@ export const LoopsPlanner = (): ReactElement => {
           }
         }
       } catch (error) {
-        console.error('Error polling job status', error);
-        setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
         clearInterval(interval);
+        setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
+        toast.error(error instanceof Error ? error.message : 'Unknown error');
       }
     }, 1000);
 
