@@ -11,7 +11,6 @@ import { geocodeCity } from '@src/utils/geocode';
 /**
  * TODO: Add error handling for API requests.
  * TODO: Add loading state while waiting for API response.
- * TODO: Render loops on the map after generation.
  */
 export const LoopsPlanner = (): ReactElement => {
   const {
