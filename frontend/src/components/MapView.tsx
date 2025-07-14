@@ -1,6 +1,9 @@
+import { ReactElement, useEffect, useRef } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import L, { LatLngExpression } from 'leaflet';
-import { ReactElement, useEffect, useRef } from 'react';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 
 const MapCenterUpdater = ({
@@ -76,8 +79,8 @@ export const MapView = (): ReactElement => {
             key={`${loop.city}-${place.name}-${index}`}
             position={[place.coordinates.lat, place.coordinates.lng]}
             icon={L.icon({
-              iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-              shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+              iconUrl: markerIcon,
+              shadowUrl: markerShadow,
               iconSize: [25, 41],
               iconAnchor: [12, 41],
             })}
