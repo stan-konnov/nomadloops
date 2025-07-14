@@ -5,7 +5,7 @@ VENV = $(BACKEND_DIR)/venv
 UV = $(VENV)/bin/uv
 PYTHON = $(VENV)/bin/python
 
-.PHONY: help install install-backend install-frontend install-hooks venv
+.PHONY: help install install-backend install-frontend install-hooks venv init-env
 
 help:
 	@echo ""
@@ -15,9 +15,10 @@ help:
 	@echo "  make install-frontend    - install frontend npm dependencies"
 	@echo "  make install-hooks       - install pre-commit hooks"
 	@echo "  make venv                - create Python virtual environment in backend/"
+	@echo "  make init-env            - copy default .env files for backend & frontend"
 	@echo ""
 
-install: install-backend install-frontend install-hooks
+install: install-backend install-frontend install-hooks init-env
 
 venv:
 	@echo "🐍 Creating virtual environment in $(VENV)…"
@@ -38,3 +39,10 @@ install-hooks:
 	@echo "🔗 Installing git hooks (pre-commit)…"
 	. $(VENV)/bin/activate && pre-commit install
 	@echo "✅ Git hooks installed."
+
+init-env:
+	@echo "📄 Initializing .env files from defaults…"
+	cp $(BACKEND_DIR)/.env.default $(BACKEND_DIR)/.env
+	@echo "✅ Copied $(BACKEND_DIR)/.env.default → $(BACKEND_DIR)/.env"
+	cp $(FRONTEND_DIR)/.env.default $(FRONTEND_DIR)/.env
+	@echo "✅ Copied $(FRONTEND_DIR)/.env.default → $(FRONTEND_DIR)/.env"
