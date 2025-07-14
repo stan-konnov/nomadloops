@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from 'react-leaflet';
 import L, { LatLngExpression } from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -45,6 +45,8 @@ const MapCenterUpdater = ({
 export const MapView = (): ReactElement => {
   const { cityCoordinates, generatedLoops } = useLoopsPlannerStore();
 
+  const loopColors = ['orange', 'cyan', 'purple'];
+
   // Default to Kuala Lumpur, Malaysia
   const defaultCenter: LatLngExpression = [
     Number(import.meta.env.VITE_DEFAULT_LAT),
@@ -73,35 +75,54 @@ export const MapView = (): ReactElement => {
 
       {cityCoordinates && <MapCenterUpdater coordinates={center} zoom={zoomOnInput} />}
 
-      {generatedLoops.flatMap((loop) =>
-        loop.places.map((place, index) => (
-          <Marker
-            key={`${loop.city}-${place.name}-${index}`}
-            position={[place.coordinates.lat, place.coordinates.lng]}
-            icon={L.icon({
-              iconUrl: markerIcon,
-              shadowUrl: markerShadow,
-              iconSize: [25, 41],
-              iconAnchor: [12, 41],
-            })}
-          >
-            <Popup>
-              <strong>{place.name}</strong>
-              <br />
-              {place.address}
-              <br />
-              Category: {place.category}
-              <br />
-              {place.url && (
-                <a href={place.url} target="_blank" rel="noopener noreferrer">
-                  Website
-                </a>
-              )}
-              {place.price && <div>Price: ${place.price}</div>}
-            </Popup>
-          </Marker>
-        )),
-      )}
+      {generatedLoops.map((loop, loopIndex) => {
+        const loopPath: LatLngExpression[] = loop.places.map((place) => [
+          place.coordinates.lat,
+          place.coordinates.lng,
+        ]);
+
+        const color = loopColors[loopIndex % loopColors.length];
+
+        return (
+          <div key={`loop-${loopIndex}`}>
+            {loop.places.map((place, placeIdx) => (
+              <Marker
+                key={`marker-${loopIndex}-${placeIdx}`}
+                position={[place.coordinates.lat, place.coordinates.lng]}
+                icon={L.icon({
+                  iconUrl: markerIcon,
+                  shadowUrl: markerShadow,
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                })}
+              >
+                <Popup>
+                  <strong>{place.name}</strong>
+                  <br />
+                  {place.address}
+                  <br />
+                  Category: {place.category}
+                  <br />
+                  {place.url && (
+                    <a href={place.url} target="_blank" rel="noopener noreferrer">
+                      Website
+                    </a>
+                  )}
+                  {place.price && <div>Price: {place.price}</div>}
+                </Popup>
+              </Marker>
+            ))}
+
+            {loopPath.length > 1 && (
+              <Polyline
+                key={`polyline-${loopIndex}`}
+                positions={loopPath}
+                pathOptions={{ color, weight: 3 }}
+              />
+            )}
+          </div>
+        );
+      })}
     </MapContainer>
   );
 };
