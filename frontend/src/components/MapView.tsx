@@ -67,9 +67,9 @@ export const MapView = (): ReactElement => {
       {cityCoordinates && <MapCenterUpdater coordinates={center} zoom={zoomOnInput} />}
 
       {generatedLoops.flatMap((loop) =>
-        loop.places.map((place, idx) => (
+        loop.places.map((place, index) => (
           <Marker
-            key={`${loop.city}-${place.name}-${idx}`}
+            key={`${loop.city}-${place.name}-${index}`}
             position={[place.coordinates.lat, place.coordinates.lng]}
             icon={L.icon({
               iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
