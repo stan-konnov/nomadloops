@@ -19,7 +19,11 @@ api.interceptors.request.use(
 );
 
 // Unwrap the response data
+// and make sure error message is propagated
 api.interceptors.response.use(
   (response) => response.data,
-  (error) => Promise.reject(error),
+  (error) => {
+    const message = error?.response?.data?.message || error?.message || 'Unknown error';
+    return Promise.reject(new Error(message));
+  },
 );

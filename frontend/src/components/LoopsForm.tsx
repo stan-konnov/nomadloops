@@ -2,6 +2,7 @@ import { useState, FormEvent, ChangeEvent, MouseEvent, ReactElement } from 'reac
 
 import { LoopsGenerationStatus, PlaceCategory } from '@src/utils/enums';
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
+import { LoadingSpinner } from '@src/components/LoadingSpinner';
 
 export const LoopsForm = (): ReactElement => {
   const {
@@ -128,14 +129,18 @@ export const LoopsForm = (): ReactElement => {
       <button
         type="submit"
         disabled={!isFormValid}
-        className={`w-full py-2 rounded 
+        className={`w-full py-2 rounded flex justify-center items-center gap-2
     ${
       !isFormValid
         ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
         : 'bg-blue-600 text-white hover:bg-blue-700'
     }`}
       >
-        Submit
+        {loopsGenerationStatus === LoopsGenerationStatus.GENERATING ? (
+          <LoadingSpinner text="Generating…" />
+        ) : (
+          'Submit'
+        )}
       </button>
     </form>
   );

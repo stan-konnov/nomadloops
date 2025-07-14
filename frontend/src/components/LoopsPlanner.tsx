@@ -1,19 +1,14 @@
 import { ReactElement, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 import { MapView } from '@src/components/MapView';
 import { LoopsForm } from '@src/components/LoopsForm';
 
 import { LoopsGenerationStatus } from '@src/utils/enums';
-import { createLoopsRequest, getLoopsStatusRequest } from '@src/api/loops.api';
+import { createLoopsRequest, getLoopsRequest, getLoopsStatusRequest } from '@src/api/loops.api';
 import { useLoopsPlannerStore } from '@src/store/loops.planner.store';
 import { geocodeCity } from '@src/utils/geocode';
 
-/**
- * TODO: Center map.
- * TODO: Add error handling for API requests.
- * TODO: Add loading state while waiting for API response.
- * TODO: Render loops on the map after generation.
- */
 export const LoopsPlanner = (): ReactElement => {
   const {
     city,
@@ -23,6 +18,7 @@ export const LoopsPlanner = (): ReactElement => {
     setCityCoordinates,
     loopsGenerationStatus,
     setLoopsGenerationStatus,
+    setGeneratedLoops,
   } = useLoopsPlannerStore();
 
   useEffect(() => {
@@ -47,9 +43,8 @@ export const LoopsPlanner = (): ReactElement => {
         });
         setLoopsGenerationStatus(LoopsGenerationStatus.GENERATING);
       } catch (error) {
-        // TODO: Toast me
-        console.error('Error creating loops:', error);
         setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
+        toast.error(error instanceof Error ? error.message : 'Unknown error');
       }
     })();
   }, [city, monthlyBudget, selectedCategories, numberOfLoopsToGenerate]);
@@ -74,11 +69,21 @@ export const LoopsPlanner = (): ReactElement => {
           ) {
             clearInterval(interval);
           }
+
+          // Finally, if the status is ready,
+          // query the loops and store them in state
+          if (loopsStatusResponse.data === LoopsGenerationStatus.READY) {
+            const getLoopsResponse = await getLoopsRequest();
+
+            if (getLoopsResponse.data) {
+              setGeneratedLoops(getLoopsResponse.data);
+            }
+          }
         }
       } catch (error) {
-        console.error('Error polling job status', error);
-        setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
         clearInterval(interval);
+        setLoopsGenerationStatus(LoopsGenerationStatus.ERROR);
+        toast.error(error instanceof Error ? error.message : 'Unknown error');
       }
     }, 1000);
 

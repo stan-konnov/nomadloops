@@ -54,7 +54,6 @@ Each loop object in the array must have the following structure:
 🚦 GUIDELINES:
 ✅ You MUST include **exactly one item for each category listed in the `selected_categories` field of the user input**, and NO other categories.
 🚫 Any category NOT listed in the `selected_categories` field MUST be excluded from the output.
-✅ If no real data is available for a requested category, invent a plausible and culturally appropriate example.
 ✅ If a monthly budget is provided, make all loops realistic within that budget.
 ✅ If multiple loops are requested, ensure they are meaningfully different. For example:
   • vary by price level (budget, midrange, premium)
@@ -65,6 +64,8 @@ Each loop object in the array must have the following structure:
 ✅ Prices must always be a single integer or float in USD — do NOT include currency symbols or letters.
 ✅ Coordinates must always be valid floats and reasonably close to the actual location (approximations are acceptable).
 ✅ Do NOT omit or rename any required fields. Use the exact field names and structure specified.
+✅ Be as realistic, geographically precise, and culturally accurate as possible.
+🚫 Do NOT invent fictitious or implausible places — always use plausible real-world examples.
 
 ---
 
