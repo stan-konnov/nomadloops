@@ -43,7 +43,11 @@ export const MapView = (): ReactElement => {
   const { cityCoordinates, generatedLoops } = useLoopsPlannerStore();
 
   // Default to Kuala Lumpur, Malaysia
-  const defaultCenter: LatLngExpression = [3.139, 101.6869];
+  const defaultCenter: LatLngExpression = [
+    Number(import.meta.env.VITE_DEFAULT_LAT),
+    Number(import.meta.env.VITE_DEFAULT_LNG),
+  ];
+
   const center: LatLngExpression =
     cityCoordinates?.lat && cityCoordinates?.lng
       ? [cityCoordinates.lat, cityCoordinates.lng]
