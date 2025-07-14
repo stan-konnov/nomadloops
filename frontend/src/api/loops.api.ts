@@ -3,6 +3,7 @@ import { ApiRoutes } from '@src/api/routes';
 import { BaseApiResponseDto } from '@src/types/dtos/base/base.api.response';
 import { DataApiResponseDto } from '@src/types/dtos/base/data.api.response';
 import { CreateLoopsRequestDto } from '@src/types/dtos/create.loops.request';
+import { Loop } from '@src/types/interfaces/loop';
 import { LoopsGenerationStatus } from '@src/utils/enums';
 
 export const createLoopsRequest = async (
@@ -15,4 +16,8 @@ export const getLoopsStatusRequest = async (): Promise<
   DataApiResponseDto<LoopsGenerationStatus>
 > => {
   return (await api.get(ApiRoutes.LOOPS_STATUS)) as DataApiResponseDto<LoopsGenerationStatus>;
+};
+
+export const getLoopsRequest = async (): Promise<DataApiResponseDto<Loop[]>> => {
+  return (await api.get(ApiRoutes.LOOPS)) as DataApiResponseDto<Loop[]>;
 };

@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 
+import { Loop } from '@src/types/interfaces/loop';
+import { Coordinates } from '@src/types/interfaces/coordinates';
 import { LoopsGenerationStatus, PlaceCategory } from '@src/utils/enums';
 import { create } from 'zustand';
 
@@ -7,8 +9,8 @@ type LoopsPlannerState = {
   city: string;
   setCity: (name: string) => void;
 
-  cityCoordinates: { lat: number; lng: number };
-  setCityCoordinates: (coordinates: { lat: number; lng: number }) => void;
+  cityCoordinates: Coordinates;
+  setCityCoordinates: (coordinates: Coordinates) => void;
 
   monthlyBudget: number;
   setMonthlyBudget: (budget: number) => void;
@@ -21,6 +23,9 @@ type LoopsPlannerState = {
 
   loopsGenerationStatus: LoopsGenerationStatus;
   setLoopsGenerationStatus: (status: LoopsGenerationStatus) => void;
+
+  generatedLoops: Loop[];
+  setGeneratedLoops: (loops: Loop[]) => void;
 };
 
 export const useLoopsPlannerStore = create<LoopsPlannerState>((set) => ({
@@ -41,4 +46,7 @@ export const useLoopsPlannerStore = create<LoopsPlannerState>((set) => ({
 
   loopsGenerationStatus: LoopsGenerationStatus.NOT_STARTED,
   setLoopsGenerationStatus: (status): void => set({ loopsGenerationStatus: status }),
+
+  generatedLoops: [],
+  setGeneratedLoops: (loops): void => set({ generatedLoops: loops }),
 }));
