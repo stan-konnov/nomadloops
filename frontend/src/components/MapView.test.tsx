@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { it, describe, expect, vi, beforeEach } from 'vitest';
 
 import { Loop } from '@src/types/interfaces/loop';
@@ -96,24 +96,37 @@ describe('<MapView />', () => {
   });
 
   it('renders markers, popups, polylines and re-centers when loops exist', () => {
+    const lat = 10;
+    const lng = 20;
+
     vi.spyOn(store, 'useLoopsPlannerStore').mockReturnValue({
       ...mockStore,
-      cityCoordinates: { lat: 10, lng: 20 },
+      cityCoordinates: { lat, lng },
       generatedLoops: [mockLoop],
     });
 
     render(<MapView />);
 
     // First flyTo: on initial mount, zoom unchanged
-    expect(mockMap.flyTo).toHaveBeenCalledWith([10, 20], mockMap.getZoom(), { animate: true });
+    expect(mockMap.flyTo).toHaveBeenCalledWith([lat, lng], mockMap.getZoom(), { animate: true });
 
     // Two markers are rendered
     const markers = screen.getAllByTestId('marker');
     expect(markers).toHaveLength(2);
 
-    // Popup contents are rendered
-    expect(screen.getByText(mockLoop.places[0].name)).toBeInTheDocument();
-    expect(screen.getByText(mockLoop.places[1].name)).toBeInTheDocument();
+    // Click market to open popup
+    fireEvent.click(markers[0]);
+
+    // Popup content is rendered
+    expect(screen.getByText('Nomad Nest Hostel')).toBeInTheDocument();
+    expect(screen.getByText(/123 Sukhumvit Soi 11, Bangkok/)).toBeInTheDocument();
+    expect(screen.getByText(/Category: living/i)).toBeInTheDocument();
+    expect(screen.getByText(/Price: 350/)).toBeInTheDocument();
+
+    expect(screen.getByText('Nomad Coworking Space')).toBeInTheDocument();
+    expect(screen.getByText(/456 Sukhumvit Soi 12, Bangkok/i)).toBeInTheDocument();
+    expect(screen.getByText(/Category: working/i)).toBeInTheDocument();
+    expect(screen.getByText(/Price: 10/)).toBeInTheDocument();
 
     // A polyline is rendered since path length > 1
     expect(screen.getByTestId('polyline')).toBeInTheDocument();
