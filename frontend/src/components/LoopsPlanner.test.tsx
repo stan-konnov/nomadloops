@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import { LoopsPlanner } from '@src/components/LoopsPlanner';
@@ -98,5 +98,26 @@ describe('<LoopsPlanner /> side-effects', () => {
         },
       ],
     });
+  });
+
+  it('geocodes the city and starts loops generation when city is valid', async () => {
+    render(<LoopsPlanner />);
+
+    await waitFor(() => {
+      expect(geocode.geocodeCity).toHaveBeenCalledWith(mockStore.city);
+    });
+
+    expect(mockStore.setCityCoordinates).toHaveBeenCalledWith({ lat: 1, lng: 2 });
+
+    expect(api.createLoopsRequest).toHaveBeenCalledWith({
+      city: mockStore.city,
+      monthlyBudget: mockStore.monthlyBudget,
+      selectedCategories: Array.from(mockStore.selectedCategories),
+      numberOfLoopsToGenerate: mockStore.numberOfLoopsToGenerate,
+    });
+
+    expect(mockStore.setLoopsGenerationStatus).toHaveBeenCalledWith(
+      LoopsGenerationStatus.GENERATING,
+    );
   });
 });
