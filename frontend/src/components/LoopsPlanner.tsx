@@ -92,7 +92,7 @@ export const LoopsPlanner = (): ReactElement => {
   }, [loopsGenerationStatus]);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen" data-testid="loops-planner">
       <div className="w-1/3 bg-gray-50 p-4 overflow-y-auto flex justify-center items-center">
         <LoopsForm />
       </div>
