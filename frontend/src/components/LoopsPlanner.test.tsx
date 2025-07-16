@@ -21,6 +21,9 @@ const mockStore = {
   city: 'Test City',
   setCity: vi.fn(),
 
+  cityCoordinates: { lat: 0, lng: 0 },
+  setCityCoordinates: vi.fn(),
+
   monthlyBudget: 1000,
   setMonthlyBudget: vi.fn(),
 
@@ -28,7 +31,7 @@ const mockStore = {
   setSelectedCategories: vi.fn(),
 
   numberOfLoopsToGenerate: 1,
-  setCityCoordinates: vi.fn(),
+  setNumberOfLoopsToGenerate: vi.fn(),
 
   loopsGenerationStatus: LoopsGenerationStatus.NOT_STARTED,
   setLoopsGenerationStatus: vi.fn(),
