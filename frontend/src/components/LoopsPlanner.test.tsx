@@ -143,11 +143,6 @@ describe('<LoopsPlanner /> side-effects', () => {
   });
 
   it('polls until READY, then fetches loops and stops', async () => {
-    vi.spyOn(store, 'useLoopsPlannerStore').mockReturnValue({
-      ...mockStore,
-      loopsGenerationStatus: LoopsGenerationStatus.GENERATING,
-    });
-
     vi.spyOn(api, 'getLoopsStatusRequest')
       .mockResolvedValueOnce({
         success: true,
