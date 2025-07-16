@@ -1,3 +1,11 @@
+vi.mock('react-hot-toast', () => ({
+  __esModule: true,
+  default: {
+    error: vi.fn(),
+  },
+}));
+import toast from 'react-hot-toast';
+
 import { ReactElement } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -54,10 +62,6 @@ describe('<LoopsPlanner />', () => {
 });
 
 describe('<LoopsPlanner /> side-effects', () => {
-  // const mockSetCityCoordinates = vi.fn();
-  // const mockSetLoopsGenerationStatus = vi.fn();
-  // const mockSetGeneratedLoops = vi.fn();
-
   beforeEach(() => {
     vi.resetAllMocks();
 
@@ -119,5 +123,19 @@ describe('<LoopsPlanner /> side-effects', () => {
     expect(mockStore.setLoopsGenerationStatus).toHaveBeenCalledWith(
       LoopsGenerationStatus.GENERATING,
     );
+  });
+
+  it('sets loops generation status to ERROR and renders toast if city cannot be geocoded', async () => {
+    const propagatedErrorMessage = 'City not found';
+
+    vi.spyOn(geocode, 'geocodeCity').mockRejectedValueOnce(new Error(propagatedErrorMessage));
+
+    render(<LoopsPlanner />);
+
+    await waitFor(() => {
+      expect(mockStore.setLoopsGenerationStatus).toHaveBeenCalledWith(LoopsGenerationStatus.ERROR);
+    });
+
+    expect(toast.error).toHaveBeenCalledWith(propagatedErrorMessage);
   });
 });
