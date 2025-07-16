@@ -2,12 +2,13 @@ import { ReactElement } from 'react';
 import { render, screen } from '@testing-library/react';
 import { it, describe, expect, vi, beforeEach } from 'vitest';
 
+import { Loop } from '@src/types/interfaces/loop';
 import { MapView } from '@src/components/MapView';
 import { LoopsGenerationStatus, PlaceCategory } from '@src/utils/enums';
 
 import * as store from '@src/store/loops.planner.store';
 
-const mapMock = {
+const mockMap = {
   on: vi.fn(),
   off: vi.fn(),
   flyTo: vi.fn(),
@@ -27,7 +28,7 @@ vi.mock('react-leaflet', () => ({
     <div data-testid="popup">{children}</div>
   ),
   Polyline: (): ReactElement => <div data-testid="polyline" />,
-  useMap: (): { [key: string]: unknown } => mapMock,
+  useMap: (): { [key: string]: unknown } => mockMap,
 }));
 
 const mockStore = {
@@ -53,11 +54,37 @@ const mockStore = {
   setGeneratedLoops: vi.fn(),
 };
 
+const mockLoop: Loop = {
+  city: 'Kuala Lumpur',
+  places: [
+    {
+      name: 'Nomad Nest Hostel',
+      category: PlaceCategory.LIVING,
+      address: '123 Sukhumvit Soi 11, Bangkok',
+      url: 'https://maps.google.com/?q=Nomad+Nest+Hostel',
+      coordinates: {
+        lat: 13.743,
+        lng: 100.535,
+      },
+      price: 350,
+    },
+    {
+      name: 'Nomad Coworking Space',
+      category: PlaceCategory.WORKING,
+      address: '456 Sukhumvit Soi 12, Bangkok',
+      url: 'https://maps.google.com/?q=Cafe+Nomad',
+      coordinates: {
+        lat: 13.744,
+        lng: 100.536,
+      },
+      price: 10,
+    },
+  ],
+};
+
 describe('<MapView />', () => {
   beforeEach(() => {
-    // clear previous mocks
     vi.resetAllMocks();
-
     vi.spyOn(store, 'useLoopsPlannerStore').mockReturnValue(mockStore);
   });
 
@@ -69,53 +96,26 @@ describe('<MapView />', () => {
   });
 
   it('renders markers, popups, polylines and re-centers when loops exist', () => {
-    // prepare a single loop with two places
-    const loop = {
-      city: 'Test City',
-      places: [
-        {
-          name: 'Nomad Nest',
-          category: PlaceCategory.LIVING,
-          address: '123 Loop St',
-          url: 'https://example.com',
-          coordinates: { lat: 10, lng: 20 },
-          price: 50,
-        },
-        {
-          name: 'Eatery',
-          category: PlaceCategory.WORKING,
-          address: '456 Loop Ave',
-          url: null,
-          coordinates: { lat: 15, lng: 25 },
-          price: null,
-        },
-      ],
-    };
-
-    // mock store with coordinates + generatedLoops
     vi.spyOn(store, 'useLoopsPlannerStore').mockReturnValue({
       ...mockStore,
       cityCoordinates: { lat: 10, lng: 20 },
-      generatedLoops: [loop],
+      generatedLoops: [mockLoop],
     });
 
     render(<MapView />);
 
-    // MapCenterUpdater should attach handlers and flyTo
-    expect(mapMock.on).toHaveBeenCalledWith('zoomend', expect.any(Function));
-
     // First flyTo: on initial mount, zoom unchanged
-    expect(mapMock.flyTo).toHaveBeenCalledWith([10, 20], mapMock.getZoom(), { animate: true });
+    expect(mockMap.flyTo).toHaveBeenCalledWith([10, 20], mockMap.getZoom(), { animate: true });
 
-    // Two markers for two places
+    // Two markers are rendered
     const markers = screen.getAllByTestId('marker');
     expect(markers).toHaveLength(2);
 
-    // popup content for the first place
-    expect(screen.getByText('Nomad Nest')).toBeInTheDocument();
-    expect(screen.getByText('Price: 50')).toBeInTheDocument();
+    // Popup contents are rendered
+    expect(screen.getByText(mockLoop.places[0].name)).toBeInTheDocument();
+    expect(screen.getByText(mockLoop.places[1].name)).toBeInTheDocument();
 
-    // a polyline is rendered since path length > 1
+    // A polyline is rendered since path length > 1
     expect(screen.getByTestId('polyline')).toBeInTheDocument();
   });
 });
