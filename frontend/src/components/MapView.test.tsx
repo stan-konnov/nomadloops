@@ -55,7 +55,7 @@ const mockStore = {
 };
 
 const mockLoop: Loop = {
-  city: 'Kuala Lumpur',
+  city: 'Bangkok',
   places: [
     {
       name: 'Nomad Nest Hostel',
