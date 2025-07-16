@@ -62,67 +62,69 @@ export const MapView = (): ReactElement => {
   const zoomOnInput = cityCoordinates?.lat && cityCoordinates?.lng ? 12 : defaultZoom;
 
   return (
-    <MapContainer
-      className="w-full h-full"
-      center={defaultCenter}
-      zoom={defaultZoom}
-      scrollWheelZoom={true}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+    <div data-testid="map-view">
+      <MapContainer
+        className="w-full h-full"
+        center={defaultCenter}
+        zoom={defaultZoom}
+        scrollWheelZoom={true}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-      {cityCoordinates && <MapCenterUpdater coordinates={center} zoom={zoomOnInput} />}
+        {cityCoordinates && <MapCenterUpdater coordinates={center} zoom={zoomOnInput} />}
 
-      {generatedLoops.map((loop, loopIndex) => {
-        const loopPath: LatLngExpression[] = loop.places.map((place) => [
-          place.coordinates.lat,
-          place.coordinates.lng,
-        ]);
+        {generatedLoops.map((loop, loopIndex) => {
+          const loopPath: LatLngExpression[] = loop.places.map((place) => [
+            place.coordinates.lat,
+            place.coordinates.lng,
+          ]);
 
-        const color = loopColors[loopIndex % loopColors.length];
+          const color = loopColors[loopIndex % loopColors.length];
 
-        return (
-          <div key={`loop-${loopIndex}`}>
-            {loop.places.map((place, placeIdx) => (
-              <Marker
-                key={`marker-${loopIndex}-${placeIdx}`}
-                position={[place.coordinates.lat, place.coordinates.lng]}
-                icon={L.icon({
-                  iconUrl: markerIcon,
-                  shadowUrl: markerShadow,
-                  iconSize: [25, 41],
-                  iconAnchor: [12, 41],
-                })}
-              >
-                <Popup>
-                  <strong>{place.name}</strong>
-                  <br />
-                  {place.address}
-                  <br />
-                  Category: {place.category}
-                  <br />
-                  {place.url && (
-                    <a href={place.url} target="_blank" rel="noopener noreferrer">
-                      Website
-                    </a>
-                  )}
-                  {place.price && <div>Price: {place.price}</div>}
-                </Popup>
-              </Marker>
-            ))}
+          return (
+            <div key={`loop-${loopIndex}`}>
+              {loop.places.map((place, placeIdx) => (
+                <Marker
+                  key={`marker-${loopIndex}-${placeIdx}`}
+                  position={[place.coordinates.lat, place.coordinates.lng]}
+                  icon={L.icon({
+                    iconUrl: markerIcon,
+                    shadowUrl: markerShadow,
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                  })}
+                >
+                  <Popup>
+                    <strong>{place.name}</strong>
+                    <br />
+                    {place.address}
+                    <br />
+                    Category: {place.category}
+                    <br />
+                    {place.url && (
+                      <a href={place.url} target="_blank" rel="noopener noreferrer">
+                        Website
+                      </a>
+                    )}
+                    {place.price && <div>Price: {place.price}</div>}
+                  </Popup>
+                </Marker>
+              ))}
 
-            {loopPath.length > 1 && (
-              <Polyline
-                key={`polyline-${loopIndex}`}
-                positions={loopPath}
-                pathOptions={{ color, weight: 3 }}
-              />
-            )}
-          </div>
-        );
-      })}
-    </MapContainer>
+              {loopPath.length > 1 && (
+                <Polyline
+                  key={`polyline-${loopIndex}`}
+                  positions={loopPath}
+                  pathOptions={{ color, weight: 3 }}
+                />
+              )}
+            </div>
+          );
+        })}
+      </MapContainer>
+    </div>
   );
 };

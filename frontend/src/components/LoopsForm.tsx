@@ -74,74 +74,76 @@ export const LoopsForm = (): ReactElement => {
     loopsGenerationStatus !== LoopsGenerationStatus.GENERATING;
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow w-96 space-y-4">
-      <div>
-        <label className="block text-sm font-medium">City Name</label>
-        <input
-          value={localCityName}
-          onChange={handleCityChange}
-          className="w-full border px-2 py-1 rounded"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium">Monthly Budget</label>
-        <input
-          type="number"
-          min={0}
-          value={localMonthlyBudget}
-          onChange={handleMonthlyBudgetChange}
-          className="w-full border px-2 py-1 rounded"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium">Categories</label>
-        <div className="flex flex-col gap-2">
-          {Object.values(PlaceCategory).map((category) => (
-            <button
-              type="button"
-              key={category}
-              onClick={handleCategoryClick(category)}
-              className={`px-2 py-1 border rounded ${
-                localSelectedCategories.has(category) ? 'bg-blue-500 text-white' : 'bg-gray-100'
-              }`}
-            >
-              {/** Convert enum values to human readable format */}
-              {category.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
-            </button>
-          ))}
+    <div data-testid="loops-form">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow w-96 space-y-4">
+        <div>
+          <label className="block text-sm font-medium">City Name</label>
+          <input
+            value={localCityName}
+            onChange={handleCityChange}
+            className="w-full border px-2 py-1 rounded"
+          />
         </div>
-      </div>
 
-      <div>
-        <label className="block text-sm font-medium">Number of Loops to Generate</label>
-        <input
-          type="number"
-          min={1}
-          max={3}
-          value={localNumberOfLoopsToGenerate}
-          onChange={handleNumberOfLoopsToGenerateChange}
-          className="w-full border px-2 py-1 rounded"
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium">Monthly Budget</label>
+          <input
+            type="number"
+            min={0}
+            value={localMonthlyBudget}
+            onChange={handleMonthlyBudgetChange}
+            className="w-full border px-2 py-1 rounded"
+          />
+        </div>
 
-      <button
-        type="submit"
-        disabled={!isFormValid}
-        className={`w-full py-2 rounded flex justify-center items-center gap-2
+        <div>
+          <label className="block text-sm font-medium">Categories</label>
+          <div className="flex flex-col gap-2">
+            {Object.values(PlaceCategory).map((category) => (
+              <button
+                type="button"
+                key={category}
+                onClick={handleCategoryClick(category)}
+                className={`px-2 py-1 border rounded ${
+                  localSelectedCategories.has(category) ? 'bg-blue-500 text-white' : 'bg-gray-100'
+                }`}
+              >
+                {/** Convert enum values to human readable format */}
+                {category.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium">Number of Loops to Generate</label>
+          <input
+            type="number"
+            min={1}
+            max={3}
+            value={localNumberOfLoopsToGenerate}
+            onChange={handleNumberOfLoopsToGenerateChange}
+            className="w-full border px-2 py-1 rounded"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={!isFormValid}
+          className={`w-full py-2 rounded flex justify-center items-center gap-2
     ${
       !isFormValid
         ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
         : 'bg-blue-600 text-white hover:bg-blue-700'
     }`}
-      >
-        {loopsGenerationStatus === LoopsGenerationStatus.GENERATING ? (
-          <LoadingSpinner text="Generating…" />
-        ) : (
-          'Submit'
-        )}
-      </button>
-    </form>
+        >
+          {loopsGenerationStatus === LoopsGenerationStatus.GENERATING ? (
+            <LoadingSpinner text="Generating…" />
+          ) : (
+            'Submit'
+          )}
+        </button>
+      </form>
+    </div>
   );
 };
