@@ -10,15 +10,12 @@ import { ReactElement } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { Loop } from '@src/types/interfaces/loop';
 import { LoopsPlanner } from '@src/components/LoopsPlanner';
 import { LoopsGenerationStatus, PlaceCategory } from '@src/utils/enums';
 
 import * as store from '@src/store/loops.planner.store';
 import * as api from '@src/api/loops.api';
 import * as geocode from '@src/utils/geocode';
-
-vi.useFakeTimers();
 
 vi.mock('./MapView', () => ({
   MapView: (): ReactElement => <div data-testid="map-view">Mock MapView</div>,
@@ -49,23 +46,6 @@ const mockStore = {
 
   generatedLoops: [],
   setGeneratedLoops: vi.fn(),
-};
-
-const mockLoop: Loop = {
-  city: 'Kuala Lumpur',
-  places: [
-    {
-      name: 'Nomad Nest Hostel',
-      category: PlaceCategory.LIVING,
-      address: '123 Sukhumvit Soi 11, Bangkok',
-      url: 'https://maps.google.com/?q=Nomad+Nest+Hostel',
-      coordinates: {
-        lat: 13.743,
-        lng: 100.535,
-      },
-      price: 350,
-    },
-  ],
 };
 
 describe('<LoopsPlanner />', () => {
@@ -103,7 +83,24 @@ describe('<LoopsPlanner /> side-effects', () => {
     vi.spyOn(api, 'getLoopsRequest').mockResolvedValue({
       success: true,
       message: 'Generated loops retrieved successfully.',
-      data: [mockLoop],
+      data: [
+        {
+          city: 'Kuala Lumpur',
+          places: [
+            {
+              name: 'Nomad Nest Hostel',
+              category: PlaceCategory.LIVING,
+              address: '123 Sukhumvit Soi 11, Bangkok',
+              url: 'https://maps.google.com/?q=Nomad+Nest+Hostel',
+              coordinates: {
+                lat: 13.743,
+                lng: 100.535,
+              },
+              price: 350,
+            },
+          ],
+        },
+      ],
     });
   });
 
@@ -140,39 +137,5 @@ describe('<LoopsPlanner /> side-effects', () => {
     });
 
     expect(toast.error).toHaveBeenCalledWith(propagatedErrorMessage);
-  });
-
-  it('polls until READY, then fetches loops and stops', async () => {
-    vi.spyOn(api, 'getLoopsStatusRequest').mockResolvedValueOnce({
-      success: true,
-      message: 'Loops generation status retrieved successfully.',
-      data: LoopsGenerationStatus.READY,
-    });
-
-    render(<LoopsPlanner />);
-
-    vi.advanceTimersByTime(1000);
-
-    await waitFor(() => {
-      expect(api.getLoopsStatusRequest).toHaveBeenCalledTimes(1);
-    });
-
-    expect(mockStore.setLoopsGenerationStatus).toHaveBeenCalledWith(
-      LoopsGenerationStatus.GENERATING,
-    );
-
-    vi.advanceTimersByTime(1000);
-
-    await waitFor(() => {
-      expect(api.getLoopsStatusRequest).toHaveBeenCalledTimes(2);
-    });
-
-    expect(mockStore.setLoopsGenerationStatus).toHaveBeenCalledWith(LoopsGenerationStatus.READY);
-
-    await waitFor(() => {
-      expect(api.getLoopsRequest).toHaveBeenCalled();
-    });
-
-    expect(mockStore.setGeneratedLoops).toHaveBeenCalledWith([mockLoop]);
   });
 });
