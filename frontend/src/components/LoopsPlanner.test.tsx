@@ -17,11 +17,11 @@ import * as store from '@src/store/loops.planner.store';
 import * as api from '@src/api/loops.api';
 import * as geocode from '@src/utils/geocode';
 
-vi.mock('./MapView', () => ({
+vi.mock('@src/components/MapView', () => ({
   MapView: (): ReactElement => <div data-testid="map-view">Mock MapView</div>,
 }));
 
-vi.mock('./LoopsForm', () => ({
+vi.mock('@src/components/LoopsForm', () => ({
   LoopsForm: (): ReactElement => <div data-testid="loops-form">Mock LoopsForm</div>,
 }));
 
