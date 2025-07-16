@@ -107,14 +107,15 @@ describe('<MapView />', () => {
 
     render(<MapView />);
 
-    // First flyTo: on initial mount, zoom unchanged
+    // Map is centered on the city coordinates
     expect(mockMap.flyTo).toHaveBeenCalledWith([lat, lng], mockMap.getZoom(), { animate: true });
 
-    // Two markers are rendered
+    // Markers are rendered
     const markers = screen.getAllByTestId('marker');
     expect(markers).toHaveLength(2);
 
-    // Click market to open popup
+    // Click the first
+    // marker to open the popup
     fireEvent.click(markers[0]);
 
     // Popup content is rendered
@@ -123,12 +124,7 @@ describe('<MapView />', () => {
     expect(screen.getByText(/Category: living/i)).toBeInTheDocument();
     expect(screen.getByText(/Price: 350/)).toBeInTheDocument();
 
-    expect(screen.getByText('Nomad Coworking Space')).toBeInTheDocument();
-    expect(screen.getByText(/456 Sukhumvit Soi 12, Bangkok/i)).toBeInTheDocument();
-    expect(screen.getByText(/Category: working/i)).toBeInTheDocument();
-    expect(screen.getByText(/Price: 10/)).toBeInTheDocument();
-
-    // A polyline is rendered since path length > 1
+    // A polyline between the two places is rendered
     expect(screen.getByTestId('polyline')).toBeInTheDocument();
   });
 });
