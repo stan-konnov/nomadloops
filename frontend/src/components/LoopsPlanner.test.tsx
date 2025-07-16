@@ -143,17 +143,11 @@ describe('<LoopsPlanner /> side-effects', () => {
   });
 
   it('polls until READY, then fetches loops and stops', async () => {
-    vi.spyOn(api, 'getLoopsStatusRequest')
-      .mockResolvedValueOnce({
-        success: true,
-        message: 'Loops generation status retrieved successfully.',
-        data: LoopsGenerationStatus.GENERATING,
-      })
-      .mockResolvedValueOnce({
-        success: true,
-        message: 'Loops generation status retrieved successfully.',
-        data: LoopsGenerationStatus.READY,
-      });
+    vi.spyOn(api, 'getLoopsStatusRequest').mockResolvedValueOnce({
+      success: true,
+      message: 'Loops generation status retrieved successfully.',
+      data: LoopsGenerationStatus.READY,
+    });
 
     render(<LoopsPlanner />);
 
