@@ -1,5 +1,6 @@
 import { ReactElement, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
 
 import { MapView } from '@src/components/MapView';
 import { LoopsForm } from '@src/components/LoopsForm';
@@ -21,6 +22,13 @@ export const LoopsPlanner = (): ReactElement => {
     setGeneratedLoops,
   } = useLoopsPlannerStore();
 
+  const geocodeCityQuery = useQuery({
+    queryKey: ['geocode-city', city],
+    enabled: false,
+    throwOnError: true,
+    queryFn: () => geocodeCity(city),
+  });
+
   useEffect(() => {
     if (city.trim() === '') {
       return;
@@ -30,8 +38,11 @@ export const LoopsPlanner = (): ReactElement => {
       try {
         // Geocode the city
         // to get coordinates and center the map
-        const cityCoordinates = await geocodeCity(city);
-        setCityCoordinates(cityCoordinates);
+        const cityCoordinates = await geocodeCityQuery.refetch();
+
+        if (cityCoordinates.data) {
+          setCityCoordinates(cityCoordinates.data);
+        }
 
         // If the city is valid,
         // kick off the loops generation
